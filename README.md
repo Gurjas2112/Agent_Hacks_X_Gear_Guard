@@ -567,7 +567,7 @@ This project is licensed under the **MIT** License - see the [LICENSE](LICENSE) 
 
 | # | Name | Role | Course | College |
 |---|------|------|--------|---------|
-| 1 | **Gurjas Singh Gandhi** | 👑 Team Leader | Second Year MCA | P.E.S Modern College of Engineering, Pune |
+| 1 | **Gurjas Singh Gandhi** | Team Leader | Second Year MCA | P.E.S Modern College of Engineering, Pune |
 | 2 | **Prathamesh Lohar** | Team Member | Second Year MCA | P.E.S Modern College of Engineering, Pune |
 | 3 | **C Sreerag** | Team Member | Second Year MCA | P.E.S Modern College of Engineering, Pune |
 | 4 | **Vivek Bhos** | Team Member | Second Year MCA | P.E.S Modern College of Engineering, Pune |
