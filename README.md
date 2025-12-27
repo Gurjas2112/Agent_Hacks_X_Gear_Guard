@@ -7,7 +7,7 @@
 **A comprehensive maintenance management system for Odoo 17**
 
 [![Odoo Version](https://img.shields.io/badge/Odoo-17.0-875A7B?style=flat-square&logo=odoo)](https://www.odoo.com)
-[![License](https://img.shields.io/badge/License-LGPL--3-blue?style=flat-square)](LICENSE)
+[![License](https://img.shields.io/badge/License-MIT-green?style=flat-square)](LICENSE)
 [![Docker](https://img.shields.io/badge/Docker-Ready-2496ED?style=flat-square&logo=docker&logoColor=white)](docker-compose.yml)
 [![Python](https://img.shields.io/badge/Python-3.10+-3776AB?style=flat-square&logo=python&logoColor=white)](https://python.org)
 
@@ -518,7 +518,7 @@ git push origin feature/my-feature
 
 ## 📄 License
 
-This project is licensed under the **LGPL-3.0** License - see the [LICENSE](LICENSE) file for details.
+This project is licensed under the **MIT** License - see the [LICENSE](LICENSE) file for details.
 
 ---
 
