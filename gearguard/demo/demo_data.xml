@@ -1,0 +1,153 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <!-- ============================================================ -->
+        <!-- DEMO DATA FOR TESTING -->
+        <!-- ============================================================ -->
+
+        <!-- Maintenance Teams -->
+        <record id="team_mechanics" model="maintenance.team">
+            <field name="name">Mechanics</field>
+            <field name="color">1</field>
+            <field name="note">Mechanical repairs for machinery and vehicles</field>
+        </record>
+
+        <record id="team_electricians" model="maintenance.team">
+            <field name="name">Electricians</field>
+            <field name="color">3</field>
+            <field name="note">Electrical repairs and installations</field>
+        </record>
+
+        <record id="team_it_support" model="maintenance.team">
+            <field name="name">IT Support</field>
+            <field name="color">4</field>
+            <field name="note">Computer and network support</field>
+        </record>
+
+        <!-- Work Centers (FROM MOCKUP) -->
+        <record id="workcenter_machine_shop" model="maintenance.work.center">
+            <field name="name">Machine Shop</field>
+            <field name="code">WC001</field>
+            <field name="location">Building A, Ground Floor</field>
+            <field name="capacity">8.0</field>
+            <field name="hourly_cost">75.00</field>
+            <field name="capacity_cost">25.00</field>
+            <field name="maintenance_team_id" ref="team_mechanics"/>
+        </record>
+
+        <record id="workcenter_electronics_lab" model="maintenance.work.center">
+            <field name="name">Electronics Lab</field>
+            <field name="code">WC002</field>
+            <field name="location">Building B, Floor 1</field>
+            <field name="capacity">8.0</field>
+            <field name="hourly_cost">85.00</field>
+            <field name="capacity_cost">15.00</field>
+            <field name="maintenance_team_id" ref="team_electricians"/>
+        </record>
+
+        <record id="workcenter_it_bay" model="maintenance.work.center">
+            <field name="name">IT Service Bay</field>
+            <field name="code">WC003</field>
+            <field name="location">Building C, Server Room</field>
+            <field name="capacity">10.0</field>
+            <field name="hourly_cost">50.00</field>
+            <field name="capacity_cost">20.00</field>
+            <field name="maintenance_team_id" ref="team_it_support"/>
+        </record>
+
+        <!-- Alternate Work Centers -->
+        <record id="workcenter_machine_shop" model="maintenance.work.center">
+            <field name="alternate_workcenter_ids" eval="[(6, 0, [ref('workcenter_electronics_lab')])]"/>
+        </record>
+
+        <!-- Sample Equipment -->
+        <record id="equipment_cnc_01" model="equipment.equipment">
+            <field name="name">CNC Machine #01</field>
+            <field name="serial_number">CNC-2024-001</field>
+            <field name="category_id" ref="category_machinery"/>
+            <field name="ownership_type">company</field>
+            <field name="location">Building A, Production Floor</field>
+            <field name="maintenance_team_id" ref="team_mechanics"/>
+            <field name="work_center_id" ref="workcenter_machine_shop"/>
+            <field name="purchase_date">2024-01-15</field>
+            <field name="warranty_expiry">2027-01-15</field>
+        </record>
+
+        <record id="equipment_forklift_01" model="equipment.equipment">
+            <field name="name">Forklift #01</field>
+            <field name="serial_number">FLT-2023-042</field>
+            <field name="category_id" ref="category_vehicles"/>
+            <field name="ownership_type">company</field>
+            <field name="location">Warehouse B</field>
+            <field name="maintenance_team_id" ref="team_mechanics"/>
+            <field name="work_center_id" ref="workcenter_machine_shop"/>
+            <field name="purchase_date">2023-06-20</field>
+            <field name="warranty_expiry">2026-06-20</field>
+        </record>
+
+        <record id="equipment_server_main" model="equipment.equipment">
+            <field name="name">Main Server</field>
+            <field name="serial_number">SRV-2024-MAIN</field>
+            <field name="category_id" ref="category_it_equipment"/>
+            <field name="ownership_type">company</field>
+            <field name="location">Server Room, Building C</field>
+            <field name="maintenance_team_id" ref="team_it_support"/>
+            <field name="work_center_id" ref="workcenter_it_bay"/>
+            <field name="purchase_date">2024-03-01</field>
+            <field name="warranty_expiry">2027-03-01</field>
+        </record>
+
+        <record id="equipment_printer_01" model="equipment.equipment">
+            <field name="name">Office Printer #01</field>
+            <field name="serial_number">PRT-2022-101</field>
+            <field name="category_id" ref="category_office"/>
+            <field name="ownership_type">company</field>
+            <field name="location">Office Floor 2</field>
+            <field name="maintenance_team_id" ref="team_it_support"/>
+            <field name="work_center_id" ref="workcenter_it_bay"/>
+            <field name="purchase_date">2022-11-10</field>
+            <field name="warranty_expiry">2024-11-10</field>
+        </record>
+
+        <!-- Sample Maintenance Requests with Cost and Reminder -->
+        <record id="request_cnc_oil_leak" model="maintenance.request">
+            <field name="name">Oil Leaking from Hydraulic System</field>
+            <field name="description">&lt;p&gt;Found oil pooling under the CNC machine. Hydraulic system appears to have a leak that needs immediate attention.&lt;/p&gt;</field>
+            <field name="equipment_id" ref="equipment_cnc_01"/>
+            <field name="maintenance_team_id" ref="team_mechanics"/>
+            <field name="work_center_id" ref="workcenter_machine_shop"/>
+            <field name="request_type">corrective</field>
+            <field name="priority">2</field>
+            <field name="stage_id" ref="stage_new"/>
+            <field name="reminder_days">3</field>
+            <field name="estimated_cost">250.00</field>
+        </record>
+
+        <record id="request_forklift_checkup" model="maintenance.request">
+            <field name="name">Monthly Forklift Inspection</field>
+            <field name="description">&lt;p&gt;Scheduled monthly maintenance check for Forklift #01.&lt;/p&gt;</field>
+            <field name="equipment_id" ref="equipment_forklift_01"/>
+            <field name="maintenance_team_id" ref="team_mechanics"/>
+            <field name="work_center_id" ref="workcenter_machine_shop"/>
+            <field name="request_type">preventive</field>
+            <field name="priority">1</field>
+            <field name="stage_id" ref="stage_new"/>
+            <field name="reminder_days">7</field>
+            <field name="estimated_cost">150.00</field>
+        </record>
+
+        <record id="request_printer_jam" model="maintenance.request">
+            <field name="name">Paper Jam - Won't Clear</field>
+            <field name="description">&lt;p&gt;Printer shows paper jam error but no visible paper stuck. Needs technician.&lt;/p&gt;</field>
+            <field name="equipment_id" ref="equipment_printer_01"/>
+            <field name="maintenance_team_id" ref="team_it_support"/>
+            <field name="work_center_id" ref="workcenter_it_bay"/>
+            <field name="request_type">corrective</field>
+            <field name="priority">1</field>
+            <field name="stage_id" ref="stage_in_progress"/>
+            <field name="reminder_days">1</field>
+            <field name="estimated_cost">50.00</field>
+        </record>
+
+    </data>
+</odoo>

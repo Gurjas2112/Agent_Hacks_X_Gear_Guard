@@ -1,0 +1,386 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- ============================================================ -->
+    <!-- MAINTENANCE REQUEST VIEWS - THE MAIN WORKSPACE -->
+    <!-- ============================================================ -->
+
+    <!-- ==================== KANBAN VIEW (PRIMARY) ==================== -->
+    <record id="maintenance_request_view_kanban" model="ir.ui.view">
+        <field name="name">maintenance.request.kanban</field>
+        <field name="model">maintenance.request</field>
+        <field name="arch" type="xml">
+            <kanban default_group_by="stage_id" class="o_kanban_small_column" 
+                    on_create="quick_create" quick_create_view="gearguard.maintenance_request_view_form_quick_create"
+                    sample="1">
+                <field name="color"/>
+                <field name="priority"/>
+                <field name="is_overdue"/>
+                <field name="stage_id"/>
+                <field name="technician_id"/>
+                <field name="equipment_id"/>
+                <field name="category_id"/>
+                <field name="request_type"/>
+                <field name="scheduled_date"/>
+                <field name="kanban_state"/>
+                <progressbar field="kanban_state" colors='{"done": "success", "blocked": "danger"}'/>
+                <templates>
+                    <t t-name="kanban-box">
+                        <div t-attf-class="oe_kanban_card oe_kanban_global_click o_kanban_record_has_image_fill #{record.is_overdue.raw_value ? 'border-danger border-3' : ''}"
+                             t-attf-style="#{record.is_overdue.raw_value ? 'background-color: #ffebee;' : ''}">
+                            
+                            <!-- OVERDUE INDICATOR - RED STRIP -->
+                            <div t-if="record.is_overdue.raw_value" 
+                                 class="bg-danger text-white text-center py-1 small fw-bold">
+                                <i class="fa fa-exclamation-triangle"/> OVERDUE
+                            </div>
+                            
+                            <div class="oe_kanban_content">
+                                <!-- Priority Stars -->
+                                <div class="o_kanban_record_top mb-0">
+                                    <div class="o_kanban_record_headings">
+                                        <strong class="o_kanban_record_title">
+                                            <field name="priority" widget="priority"/>
+                                            <field name="name"/>
+                                        </strong>
+                                    </div>
+                                </div>
+                                
+                                <!-- Equipment & Category Info -->
+                                <div class="o_kanban_record_body">
+                                    <div class="mb-1">
+                                        <i class="fa fa-cog me-1 text-muted"/>
+                                        <field name="equipment_id"/>
+                                    </div>
+                                    <div class="mb-1">
+                                        <i class="fa fa-folder-o me-1 text-muted"/>
+                                        <field name="category_id"/>
+                                    </div>
+                                    <div t-if="record.scheduled_date.raw_value" class="mb-1">
+                                        <i class="fa fa-calendar me-1 text-muted"/>
+                                        <field name="scheduled_date"/>
+                                    </div>
+                                    
+                                    <!-- Request Type Badge -->
+                                    <span t-if="record.request_type.raw_value == 'corrective'" 
+                                          class="badge text-bg-danger">
+                                        <i class="fa fa-bolt"/> Breakdown
+                                    </span>
+                                    <span t-if="record.request_type.raw_value == 'preventive'" 
+                                          class="badge text-bg-info">
+                                        <i class="fa fa-calendar-check-o"/> Routine
+                                    </span>
+                                </div>
+                                
+                                <!-- Bottom: Technician Avatar -->
+                                <div class="o_kanban_record_bottom">
+                                    <div class="oe_kanban_bottom_left">
+                                        <field name="activity_ids" widget="kanban_activity"/>
+                                    </div>
+                                    <div class="oe_kanban_bottom_right">
+                                        <field name="technician_id" widget="many2one_avatar_user"/>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </t>
+                </templates>
+            </kanban>
+        </field>
+    </record>
+
+    <!-- Quick Create Form for Kanban -->
+    <record id="maintenance_request_view_form_quick_create" model="ir.ui.view">
+        <field name="name">maintenance.request.form.quick_create</field>
+        <field name="model">maintenance.request</field>
+        <field name="priority">1000</field>
+        <field name="arch" type="xml">
+            <form string="Quick Create">
+                <group>
+                    <field name="name" placeholder="What is wrong?"/>
+                    <field name="equipment_id"/>
+                    <field name="maintenance_team_id"/>
+                    <field name="request_type"/>
+                </group>
+            </form>
+        </field>
+    </record>
+
+    <!-- ==================== TREE VIEW ==================== -->
+    <record id="maintenance_request_view_tree" model="ir.ui.view">
+        <field name="name">maintenance.request.tree</field>
+        <field name="model">maintenance.request</field>
+        <field name="arch" type="xml">
+            <tree string="Maintenance Requests" 
+                  decoration-danger="is_overdue"
+                  decoration-muted="stage_id.is_closed">
+                <field name="priority" widget="priority" nolabel="1"/>
+                <field name="name"/>
+                <field name="equipment_id"/>
+                <field name="category_id"/>
+                <field name="work_center_id" optional="show"/>
+                <field name="request_type" widget="badge"
+                       decoration-danger="request_type=='corrective'"
+                       decoration-info="request_type=='preventive'"/>
+                <field name="maintenance_team_id"/>
+                <field name="technician_id" widget="many2one_avatar_user"/>
+                <field name="scheduled_date"/>
+                <field name="reminder_date" optional="hide"/>
+                <field name="stage_id" widget="badge"/>
+                <field name="duration" sum="Total Hours"/>
+                <field name="estimated_cost" sum="Est. Total" optional="hide"/>
+                <field name="actual_cost" sum="Actual Total" optional="hide"/>
+                <field name="is_overdue" invisible="1"/>
+            </tree>
+        </field>
+    </record>
+
+    <!-- ==================== FORM VIEW (MAIN) ==================== -->
+    <record id="maintenance_request_view_form" model="ir.ui.view">
+        <field name="name">maintenance.request.form</field>
+        <field name="model">maintenance.request</field>
+        <field name="arch" type="xml">
+            <form string="Maintenance Request">
+                <header>
+                    <button name="action_assign_to_me" type="object"
+                            string="Assign to Me" class="oe_highlight"
+                            invisible="technician_id"/>
+                    <button name="action_mark_repaired" type="object"
+                            string="Mark as Repaired" class="btn-success"
+                            invisible="stage_id.is_closed"/>
+                    <field name="stage_id" widget="statusbar" 
+                           options="{'clickable': '1', 'fold_field': 'fold'}"/>
+                </header>
+                <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        <button name="action_open_equipment" type="object"
+                                class="oe_stat_button" icon="fa-cog">
+                            <span class="o_stat_text">Equipment</span>
+                        </button>
+                    </div>
+                    
+                    <!-- Overdue Ribbon -->
+                    <widget name="web_ribbon" title="OVERDUE" bg_color="bg-danger"
+                            invisible="not is_overdue"/>
+                    
+                    <div class="oe_title">
+                        <h1>
+                            <field name="priority" widget="priority" class="me-2"/>
+                            <field name="name" placeholder="Subject (e.g., Leaking Oil)"/>
+                        </h1>
+                    </div>
+                    
+                    <group>
+                        <group string="Request Information">
+                            <field name="request_type" widget="radio"/>
+                            <field name="equipment_id"/>
+                            <field name="category_id" readonly="1"/>
+                            <field name="equipment_serial" readonly="1"/>
+                            <field name="equipment_location" readonly="1"/>
+                            <field name="work_center_id"/>
+                        </group>
+                        <group string="Assignment">
+                            <field name="maintenance_team_id"/>
+                            <field name="team_member_ids" invisible="1"/>
+                            <field name="technician_id" 
+                                   domain="[('id', 'in', team_member_ids)]"
+                                   options="{'no_create': True}"/>
+                            <field name="user_id" readonly="1"/>
+                            <field name="kanban_state" widget="state_selection"/>
+                        </group>
+                    </group>
+                    
+                    <group>
+                        <group string="Schedule">
+                            <field name="request_date" readonly="1"/>
+                            <field name="scheduled_date"/>
+                            <field name="deadline"/>
+                            <field name="close_date" readonly="1" 
+                                   invisible="not close_date"/>
+                        </group>
+                        <group string="Time &amp; Reminder">
+                            <field name="duration" widget="float_time"/>
+                            <field name="reminder_days"/>
+                            <field name="reminder_date" readonly="1"/>
+                            <field name="is_overdue" invisible="1"/>
+                        </group>
+                    </group>
+                    
+                    <group>
+                        <group string="Cost Information">
+                            <field name="currency_id" invisible="1"/>
+                            <field name="estimated_cost" widget="monetary"/>
+                            <field name="actual_cost" widget="monetary"/>
+                        </group>
+                    </group>
+                    
+                    <notebook>
+                        <page string="Description">
+                            <field name="description" placeholder="Detailed description of the issue..."/>
+                        </page>
+                    </notebook>
+                </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids"/>
+                    <field name="activity_ids"/>
+                    <field name="message_ids"/>
+                </div>
+            </form>
+        </field>
+    </record>
+
+    <!-- ==================== CALENDAR VIEW ==================== -->
+    <record id="maintenance_request_view_calendar" model="ir.ui.view">
+        <field name="name">maintenance.request.calendar</field>
+        <field name="model">maintenance.request</field>
+        <field name="arch" type="xml">
+            <calendar string="Maintenance Calendar" date_start="scheduled_date"
+                      color="maintenance_team_id" mode="month"
+                      event_open_popup="true" quick_create="false">
+                <field name="name"/>
+                <field name="equipment_id"/>
+                <field name="maintenance_team_id"/>
+                <field name="technician_id" widget="many2one_avatar_user"/>
+                <field name="request_type"/>
+            </calendar>
+        </field>
+    </record>
+
+    <!-- ==================== PIVOT VIEW ==================== -->
+    <record id="maintenance_request_view_pivot" model="ir.ui.view">
+        <field name="name">maintenance.request.pivot</field>
+        <field name="model">maintenance.request</field>
+        <field name="arch" type="xml">
+            <pivot string="Maintenance Analysis" sample="1">
+                <field name="maintenance_team_id" type="row"/>
+                <field name="category_id" type="col"/>
+                <field name="duration" type="measure"/>
+                <field name="estimated_cost" type="measure"/>
+                <field name="actual_cost" type="measure"/>
+            </pivot>
+        </field>
+    </record>
+
+    <!-- ==================== GRAPH VIEW ==================== -->
+    <record id="maintenance_request_view_graph" model="ir.ui.view">
+        <field name="name">maintenance.request.graph</field>
+        <field name="model">maintenance.request</field>
+        <field name="arch" type="xml">
+            <graph string="Maintenance Analysis" type="bar" sample="1">
+                <field name="maintenance_team_id"/>
+                <field name="duration" type="measure"/>
+            </graph>
+        </field>
+    </record>
+
+    <!-- Graph by Category -->
+    <record id="maintenance_request_view_graph_category" model="ir.ui.view">
+        <field name="name">maintenance.request.graph.category</field>
+        <field name="model">maintenance.request</field>
+        <field name="arch" type="xml">
+            <graph string="Requests by Category" type="pie" sample="1">
+                <field name="category_id"/>
+            </graph>
+        </field>
+    </record>
+
+    <!-- ==================== SEARCH VIEW ==================== -->
+    <record id="maintenance_request_view_search" model="ir.ui.view">
+        <field name="name">maintenance.request.search</field>
+        <field name="model">maintenance.request</field>
+        <field name="arch" type="xml">
+            <search string="Search Requests">
+                <field name="name"/>
+                <field name="equipment_id"/>
+                <field name="category_id"/>
+                <field name="work_center_id"/>
+                <field name="maintenance_team_id"/>
+                <field name="technician_id"/>
+                
+                <!-- Quick Filters -->
+                <filter string="My Requests" name="my_requests"
+                        domain="[('technician_id', '=', uid)]"/>
+                <filter string="Unassigned" name="unassigned"
+                        domain="[('technician_id', '=', False)]"/>
+                <separator/>
+                <filter string="Corrective (Breakdown)" name="corrective"
+                        domain="[('request_type', '=', 'corrective')]"/>
+                <filter string="Preventive (Routine)" name="preventive"
+                        domain="[('request_type', '=', 'preventive')]"/>
+                <separator/>
+                <filter string="Overdue" name="overdue"
+                        domain="[('is_overdue', '=', True)]"/>
+                <filter string="Open" name="open"
+                        domain="[('stage_id.is_closed', '=', False)]"/>
+                <filter string="Closed" name="closed"
+                        domain="[('stage_id.is_closed', '=', True)]"/>
+                <separator/>
+                <filter string="Reminder Due" name="reminder_due"
+                        domain="[('reminder_date', '&lt;=', context_today())]"/>
+                <filter string="Scheduled Today" name="today"
+                        domain="[('scheduled_date', '>=', datetime.datetime.combine(context_today(), datetime.time(0,0,0))),
+                                 ('scheduled_date', '&lt;', datetime.datetime.combine(context_today() + relativedelta(days=1), datetime.time(0,0,0)))]"/>
+                <filter string="Scheduled This Week" name="this_week"
+                        domain="[('scheduled_date', '>=', (context_today() - relativedelta(weekday=0))),
+                                 ('scheduled_date', '&lt;', (context_today() + relativedelta(weekday=6, days=1)))]"/>
+                
+                <separator/>
+                <group expand="0" string="Group By">
+                    <filter string="Stage" name="group_stage" context="{'group_by': 'stage_id'}"/>
+                    <filter string="Equipment" name="group_equipment" context="{'group_by': 'equipment_id'}"/>
+                    <filter string="Category" name="group_category" context="{'group_by': 'category_id'}"/>
+                    <filter string="Work Center" name="group_work_center" context="{'group_by': 'work_center_id'}"/>
+                    <filter string="Team" name="group_team" context="{'group_by': 'maintenance_team_id'}"/>
+                    <filter string="Technician" name="group_technician" context="{'group_by': 'technician_id'}"/>
+                    <filter string="Type" name="group_type" context="{'group_by': 'request_type'}"/>
+                    <filter string="Scheduled Date" name="group_date" context="{'group_by': 'scheduled_date:month'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <!-- ==================== ACTIONS ==================== -->
+    
+    <!-- Main Action: Kanban Board -->
+    <record id="action_maintenance_request" model="ir.actions.act_window">
+        <field name="name">Maintenance Requests</field>
+        <field name="res_model">maintenance.request</field>
+        <field name="view_mode">kanban,tree,form,calendar,pivot,graph</field>
+        <field name="search_view_id" ref="maintenance_request_view_search"/>
+        <field name="context">{'search_default_open': 1}</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Create your first maintenance request
+            </p>
+            <p>
+                Track corrective (breakdown) and preventive (routine) maintenance.
+            </p>
+        </field>
+    </record>
+
+    <!-- Action: Calendar View (Preventive) -->
+    <record id="action_maintenance_request_calendar" model="ir.actions.act_window">
+        <field name="name">Maintenance Calendar</field>
+        <field name="res_model">maintenance.request</field>
+        <field name="view_mode">calendar,kanban,tree,form</field>
+        <field name="search_view_id" ref="maintenance_request_view_search"/>
+        <field name="context">{'search_default_preventive': 1}</field>
+    </record>
+
+    <!-- Action: My Requests -->
+    <record id="action_maintenance_request_my" model="ir.actions.act_window">
+        <field name="name">My Requests</field>
+        <field name="res_model">maintenance.request</field>
+        <field name="view_mode">kanban,tree,form,calendar</field>
+        <field name="search_view_id" ref="maintenance_request_view_search"/>
+        <field name="context">{'search_default_my_requests': 1, 'search_default_open': 1}</field>
+    </record>
+
+    <!-- Action: Reports -->
+    <record id="action_maintenance_request_report" model="ir.actions.act_window">
+        <field name="name">Maintenance Reports</field>
+        <field name="res_model">maintenance.request</field>
+        <field name="view_mode">pivot,graph,tree</field>
+        <field name="search_view_id" ref="maintenance_request_view_search"/>
+    </record>
+
+</odoo>

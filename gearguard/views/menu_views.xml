@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- ============================================================ -->
+    <!-- MAIN MENU STRUCTURE -->
+    <!-- ============================================================ -->
+
+    <!-- Root Menu -->
+    <menuitem id="menu_gearguard_root"
+              name="GearGuard"
+              sequence="50"
+              web_icon="gearguard,static/description/icon.png"/>
+
+    <!-- ==================== MAINTENANCE REQUESTS ==================== -->
+    <menuitem id="menu_maintenance_requests"
+              name="Maintenance"
+              parent="menu_gearguard_root"
+              sequence="10"/>
+    
+    <menuitem id="menu_maintenance_request_all"
+              name="All Requests"
+              parent="menu_maintenance_requests"
+              action="action_maintenance_request"
+              sequence="10"/>
+    
+    <menuitem id="menu_maintenance_request_my"
+              name="My Requests"
+              parent="menu_maintenance_requests"
+              action="action_maintenance_request_my"
+              sequence="20"/>
+    
+    <menuitem id="menu_maintenance_request_calendar"
+              name="Calendar"
+              parent="menu_maintenance_requests"
+              action="action_maintenance_request_calendar"
+              sequence="30"/>
+
+    <!-- ==================== EQUIPMENT ==================== -->
+    <menuitem id="menu_equipment"
+              name="Equipment"
+              parent="menu_gearguard_root"
+              sequence="20"/>
+    
+    <menuitem id="menu_equipment_all"
+              name="All Equipment"
+              parent="menu_equipment"
+              action="action_equipment"
+              sequence="10"/>
+    
+    <menuitem id="menu_equipment_by_department"
+              name="By Department"
+              parent="menu_equipment"
+              action="action_equipment_by_department"
+              sequence="20"/>
+    
+    <menuitem id="menu_equipment_by_employee"
+              name="By Employee"
+              parent="menu_equipment"
+              action="action_equipment_by_employee"
+              sequence="30"/>
+    
+    <menuitem id="menu_equipment_categories"
+              name="Categories"
+              parent="menu_equipment"
+              action="action_equipment_category"
+              sequence="40"/>
+
+    <!-- ==================== WORK CENTERS ==================== -->
+    <menuitem id="menu_work_centers"
+              name="Work Centers"
+              parent="menu_gearguard_root"
+              action="action_work_center"
+              sequence="25"/>
+
+    <!-- ==================== TEAMS ==================== -->
+    <menuitem id="menu_teams"
+              name="Teams"
+              parent="menu_gearguard_root"
+              action="action_maintenance_team"
+              sequence="30"/>
+
+    <!-- ==================== REPORTS ==================== -->
+    <menuitem id="menu_reports"
+              name="Reporting"
+              parent="menu_gearguard_root"
+              sequence="40"/>
+    
+    <menuitem id="menu_maintenance_reports"
+              name="Maintenance Analysis"
+              parent="menu_reports"
+              action="action_maintenance_request_report"
+              sequence="10"/>
+
+    <!-- ==================== CONFIGURATION ==================== -->
+    <menuitem id="menu_configuration"
+              name="Configuration"
+              parent="menu_gearguard_root"
+              sequence="100"
+              groups="base.group_system"/>
+    
+    <menuitem id="menu_config_categories"
+              name="Equipment Categories"
+              parent="menu_configuration"
+              action="action_equipment_category"
+              sequence="10"/>
+    
+    <menuitem id="menu_config_teams"
+              name="Maintenance Teams"
+              parent="menu_configuration"
+              action="action_maintenance_team"
+              sequence="20"/>
+
+</odoo>

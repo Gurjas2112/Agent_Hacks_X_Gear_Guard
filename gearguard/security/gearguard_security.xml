@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- ============================================================ -->
+    <!-- SECURITY GROUPS -->
+    <!-- ============================================================ -->
+
+    <record id="module_category_gearguard" model="ir.module.category">
+        <field name="name">GearGuard</field>
+        <field name="description">Maintenance Management System</field>
+        <field name="sequence">50</field>
+    </record>
+
+    <!-- User: Can create requests, view equipment -->
+    <record id="group_gearguard_user" model="res.groups">
+        <field name="name">User</field>
+        <field name="category_id" ref="module_category_gearguard"/>
+        <field name="implied_ids" eval="[(4, ref('base.group_user'))]"/>
+        <field name="comment">Can create and view maintenance requests</field>
+    </record>
+
+    <!-- Technician: Can be assigned to requests -->
+    <record id="group_gearguard_technician" model="res.groups">
+        <field name="name">Technician</field>
+        <field name="category_id" ref="module_category_gearguard"/>
+        <field name="implied_ids" eval="[(4, ref('group_gearguard_user'))]"/>
+        <field name="comment">Can be assigned to and work on maintenance requests</field>
+    </record>
+
+    <!-- Manager: Full access -->
+    <record id="group_gearguard_manager" model="res.groups">
+        <field name="name">Manager</field>
+        <field name="category_id" ref="module_category_gearguard"/>
+        <field name="implied_ids" eval="[(4, ref('group_gearguard_technician'))]"/>
+        <field name="comment">Full access to GearGuard module</field>
+    </record>
+
+</odoo>

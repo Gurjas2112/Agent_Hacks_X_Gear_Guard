@@ -1,0 +1,154 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- ============================================================ -->
+    <!-- MAINTENANCE TEAM VIEWS -->
+    <!-- ============================================================ -->
+
+    <!-- Tree View -->
+    <record id="maintenance_team_view_tree" model="ir.ui.view">
+        <field name="name">maintenance.team.tree</field>
+        <field name="model">maintenance.team</field>
+        <field name="arch" type="xml">
+            <tree string="Maintenance Teams">
+                <field name="name"/>
+                <field name="team_leader_id" widget="many2one_avatar_user"/>
+                <field name="member_count"/>
+                <field name="equipment_count"/>
+                <field name="open_request_count" string="Open Requests"/>
+            </tree>
+        </field>
+    </record>
+
+    <!-- Form View -->
+    <record id="maintenance_team_view_form" model="ir.ui.view">
+        <field name="name">maintenance.team.form</field>
+        <field name="model">maintenance.team</field>
+        <field name="arch" type="xml">
+            <form string="Maintenance Team">
+                <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        <button name="action_view_equipment" type="object"
+                                class="oe_stat_button" icon="fa-cogs">
+                            <field name="equipment_count" widget="statinfo" string="Equipment"/>
+                        </button>
+                        <button name="action_view_requests" type="object"
+                                class="oe_stat_button" icon="fa-wrench">
+                            <field name="open_request_count" widget="statinfo" string="Open Requests"/>
+                        </button>
+                    </div>
+                    
+                    <div class="oe_title">
+                        <h1>
+                            <field name="name" placeholder="Team Name (e.g., Mechanics, IT Support)"/>
+                        </h1>
+                    </div>
+                    
+                    <group>
+                        <group string="Team Information">
+                            <field name="team_leader_id" domain="[('id', 'in', member_ids)]"/>
+                            <field name="color" widget="color_picker"/>
+                        </group>
+                        <group string="Statistics">
+                            <field name="member_count"/>
+                            <field name="equipment_count"/>
+                            <field name="request_count"/>
+                        </group>
+                    </group>
+                    
+                    <notebook>
+                        <page string="Team Members">
+                            <field name="member_ids" widget="many2many_tags" 
+                                   options="{'color_field': 'color'}">
+                                <tree>
+                                    <field name="name"/>
+                                    <field name="email"/>
+                                </tree>
+                            </field>
+                        </page>
+                        <page string="Notes">
+                            <field name="note" placeholder="Description of team responsibilities..."/>
+                        </page>
+                    </notebook>
+                </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids"/>
+                    <field name="message_ids"/>
+                </div>
+            </form>
+        </field>
+    </record>
+
+    <!-- Kanban View -->
+    <record id="maintenance_team_view_kanban" model="ir.ui.view">
+        <field name="name">maintenance.team.kanban</field>
+        <field name="model">maintenance.team</field>
+        <field name="arch" type="xml">
+            <kanban class="o_kanban_mobile" sample="1">
+                <field name="name"/>
+                <field name="color"/>
+                <field name="team_leader_id"/>
+                <field name="member_count"/>
+                <field name="equipment_count"/>
+                <field name="open_request_count"/>
+                <templates>
+                    <t t-name="kanban-box">
+                        <div t-attf-class="oe_kanban_card oe_kanban_global_click"
+                             t-attf-style="border-left: 4px solid #{kanban_color(record.color.raw_value)};">
+                            <div class="oe_kanban_content">
+                                <div class="o_kanban_record_top">
+                                    <div class="o_kanban_record_headings">
+                                        <strong class="o_kanban_record_title">
+                                            <field name="name"/>
+                                        </strong>
+                                    </div>
+                                </div>
+                                <div class="o_kanban_record_body">
+                                    <div><i class="fa fa-user me-1"/>Leader: <field name="team_leader_id"/></div>
+                                    <div><i class="fa fa-users me-1"/><field name="member_count"/> Members</div>
+                                    <div><i class="fa fa-cogs me-1"/><field name="equipment_count"/> Equipment</div>
+                                </div>
+                                <div class="o_kanban_record_bottom">
+                                    <div class="oe_kanban_bottom_left">
+                                        <span t-if="record.open_request_count.raw_value > 0" 
+                                              class="badge text-bg-warning">
+                                            <field name="open_request_count"/> Open Requests
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </t>
+                </templates>
+            </kanban>
+        </field>
+    </record>
+
+    <!-- Search View -->
+    <record id="maintenance_team_view_search" model="ir.ui.view">
+        <field name="name">maintenance.team.search</field>
+        <field name="model">maintenance.team</field>
+        <field name="arch" type="xml">
+            <search string="Search Teams">
+                <field name="name"/>
+                <field name="team_leader_id"/>
+                <field name="member_ids"/>
+            </search>
+        </field>
+    </record>
+
+    <!-- Action -->
+    <record id="action_maintenance_team" model="ir.actions.act_window">
+        <field name="name">Maintenance Teams</field>
+        <field name="res_model">maintenance.team</field>
+        <field name="view_mode">kanban,tree,form</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Create your first maintenance team
+            </p>
+            <p>
+                Define specialized teams like Mechanics, Electricians, IT Support.
+            </p>
+        </field>
+    </record>
+
+</odoo>

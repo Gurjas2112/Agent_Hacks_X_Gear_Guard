@@ -1,0 +1,16 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_equipment_category_user,equipment.category.user,model_equipment_category,group_gearguard_user,1,0,0,0
+access_equipment_category_manager,equipment.category.manager,model_equipment_category,group_gearguard_manager,1,1,1,1
+access_equipment_user,equipment.equipment.user,model_equipment_equipment,group_gearguard_user,1,0,0,0
+access_equipment_technician,equipment.equipment.technician,model_equipment_equipment,group_gearguard_technician,1,1,0,0
+access_equipment_manager,equipment.equipment.manager,model_equipment_equipment,group_gearguard_manager,1,1,1,1
+access_maintenance_team_user,maintenance.team.user,model_maintenance_team,group_gearguard_user,1,0,0,0
+access_maintenance_team_manager,maintenance.team.manager,model_maintenance_team,group_gearguard_manager,1,1,1,1
+access_maintenance_stage_user,maintenance.stage.user,model_maintenance_stage,group_gearguard_user,1,0,0,0
+access_maintenance_stage_manager,maintenance.stage.manager,model_maintenance_stage,group_gearguard_manager,1,1,1,1
+access_maintenance_request_user,maintenance.request.user,model_maintenance_request,group_gearguard_user,1,1,1,0
+access_maintenance_request_technician,maintenance.request.technician,model_maintenance_request,group_gearguard_technician,1,1,1,0
+access_maintenance_request_manager,maintenance.request.manager,model_maintenance_request,group_gearguard_manager,1,1,1,1
+access_work_center_user,maintenance.work.center.user,model_maintenance_work_center,group_gearguard_user,1,0,0,0
+access_work_center_technician,maintenance.work.center.technician,model_maintenance_work_center,group_gearguard_technician,1,1,0,0
+access_work_center_manager,maintenance.work.center.manager,model_maintenance_work_center,group_gearguard_manager,1,1,1,1
