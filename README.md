@@ -535,7 +535,7 @@ This project is licensed under the **MIT** License - see the [LICENSE](LICENSE) 
     <td align="center">
       <img src="team_member_photos/member_1.jpg" width="150" height="150" style="border-radius: 50%;" alt="Gurjas Singh Gandhi"/><br/>
       <b>Gurjas Singh Gandhi</b><br/>
-      👑 Team Leader<br/>
+       Team Leader<br/>
       <sub>Second Year MCA</sub><br/>
       <sub>P.E.S Modern College of Engineering, Pune</sub>
     </td>
