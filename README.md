@@ -522,9 +522,55 @@ This project is licensed under the **LGPL-3.0** License - see the [LICENSE](LICE
 
 ---
 
-## 👨‍💻 Author
+## 👨‍💻 Team
 
-**GearGuard Team**
+**Team Name: Agent Hacks**
+
+<div align="center">
+
+### Meet Our Team
+
+<table>
+  <tr>
+    <td align="center">
+      <img src="team_member_photos/member_1.jpg" width="150" height="150" style="border-radius: 50%;" alt="Gurjas Singh Gandhi"/><br/>
+      <b>Gurjas Singh Gandhi</b><br/>
+      👑 Team Leader<br/>
+      <sub>Second Year MCA</sub><br/>
+      <sub>P.E.S Modern College of Engineering, Pune</sub>
+    </td>
+    <td align="center">
+      <img src="team_member_photos/member_2.jpg" width="150" height="150" style="border-radius: 50%;" alt="Prathamesh Lohar"/><br/>
+      <b>Prathamesh Lohar</b><br/>
+      🔧 Team Member<br/>
+      <sub>Second Year MCA</sub><br/>
+      <sub>P.E.S Modern College of Engineering, Pune</sub>
+    </td>
+    <td align="center">
+      <img src="team_member_photos/member_3.jpg" width="150" height="150" style="border-radius: 50%;" alt="C Sreerag"/><br/>
+      <b>C Sreerag</b><br/>
+      🔧 Team Member<br/>
+      <sub>Second Year MCA</sub><br/>
+      <sub>P.E.S Modern College of Engineering, Pune</sub>
+    </td>
+    <td align="center">
+      <img src="team_member_photos/member_4.jpg" width="150" height="150" style="border-radius: 50%;" alt="Vivek Bhos"/><br/>
+      <b>Vivek Bhos</b><br/>
+      🔧 Team Member<br/>
+      <sub>Second Year MCA</sub><br/>
+      <sub>P.E.S Modern College of Engineering, Pune</sub>
+    </td>
+  </tr>
+</table>
+
+</div>
+
+| # | Name | Role | Course | College |
+|---|------|------|--------|---------|
+| 1 | **Gurjas Singh Gandhi** | 👑 Team Leader | Second Year MCA | P.E.S Modern College of Engineering, Pune |
+| 2 | **Prathamesh Lohar** | Team Member | Second Year MCA | P.E.S Modern College of Engineering, Pune |
+| 3 | **C Sreerag** | Team Member | Second Year MCA | P.E.S Modern College of Engineering, Pune |
+| 4 | **Vivek Bhos** | Team Member | Second Year MCA | P.E.S Modern College of Engineering, Pune |
 
 - 🌐 GitHub: [@Gurjas2112](https://github.com/Gurjas2112/GearGuard)
 - 📧 Repository: [GearGuard](https://github.com/Gurjas2112/GearGuard)
