@@ -2,151 +2,877 @@
 <odoo>
     <data>
         <!-- ============================================================ -->
-        <!-- DEMO DATA FOR TESTING -->
+        <!-- COMPREHENSIVE DEMO DATA FOR GEARGUARD HACKATHON -->
+        <!-- This creates a realistic, populated maintenance system -->
         <!-- ============================================================ -->
 
-        <!-- Maintenance Teams -->
+        <!-- ==================== HR DEPARTMENTS ==================== -->
+        <record id="dept_production" model="hr.department">
+            <field name="name">Production</field>
+        </record>
+        <record id="dept_it" model="hr.department">
+            <field name="name">IT Department</field>
+        </record>
+        <record id="dept_warehouse" model="hr.department">
+            <field name="name">Warehouse</field>
+        </record>
+        <record id="dept_facilities" model="hr.department">
+            <field name="name">Facilities</field>
+        </record>
+        <record id="dept_sales" model="hr.department">
+            <field name="name">Sales</field>
+        </record>
+        <record id="dept_admin" model="hr.department">
+            <field name="name">Administration</field>
+        </record>
+
+        <!-- ==================== HR EMPLOYEES ==================== -->
+        <!-- Production Team Employees -->
+        <record id="emp_john_miller" model="hr.employee">
+            <field name="name">John Miller</field>
+            <field name="department_id" ref="dept_production"/>
+            <field name="job_title">Production Supervisor</field>
+        </record>
+        <record id="emp_mike_wilson" model="hr.employee">
+            <field name="name">Mike Wilson</field>
+            <field name="department_id" ref="dept_production"/>
+            <field name="job_title">Machine Operator</field>
+        </record>
+        
+        <!-- IT Team Employees -->
+        <record id="emp_sarah_chen" model="hr.employee">
+            <field name="name">Sarah Chen</field>
+            <field name="department_id" ref="dept_it"/>
+            <field name="job_title">IT Manager</field>
+        </record>
+        <record id="emp_alex_kumar" model="hr.employee">
+            <field name="name">Alex Kumar</field>
+            <field name="department_id" ref="dept_it"/>
+            <field name="job_title">System Administrator</field>
+        </record>
+        
+        <!-- Warehouse Employees -->
+        <record id="emp_david_brown" model="hr.employee">
+            <field name="name">David Brown</field>
+            <field name="department_id" ref="dept_warehouse"/>
+            <field name="job_title">Warehouse Manager</field>
+        </record>
+        
+        <!-- Sales Employees -->
+        <record id="emp_lisa_johnson" model="hr.employee">
+            <field name="name">Lisa Johnson</field>
+            <field name="department_id" ref="dept_sales"/>
+            <field name="job_title">Sales Representative</field>
+        </record>
+        <record id="emp_tom_garcia" model="hr.employee">
+            <field name="name">Tom Garcia</field>
+            <field name="department_id" ref="dept_sales"/>
+            <field name="job_title">Regional Sales Manager</field>
+        </record>
+
+        <!-- ==================== MAINTENANCE TEAMS ==================== -->
         <record id="team_mechanics" model="maintenance.team">
             <field name="name">Mechanics</field>
             <field name="color">1</field>
-            <field name="note">Mechanical repairs for machinery and vehicles</field>
+            <field name="note">Mechanical repairs for machinery, vehicles, and heavy equipment. Specializes in hydraulics, pneumatics, and mechanical systems.</field>
         </record>
 
         <record id="team_electricians" model="maintenance.team">
             <field name="name">Electricians</field>
             <field name="color">3</field>
-            <field name="note">Electrical repairs and installations</field>
+            <field name="note">Electrical repairs, installations, and power systems. Handles motors, wiring, panels, and electrical diagnostics.</field>
         </record>
 
         <record id="team_it_support" model="maintenance.team">
             <field name="name">IT Support</field>
             <field name="color">4</field>
-            <field name="note">Computer and network support</field>
+            <field name="note">Computer hardware, software, and network support. Manages servers, workstations, printers, and IT infrastructure.</field>
+        </record>
+        
+        <record id="team_hvac" model="maintenance.team">
+            <field name="name">HVAC Technicians</field>
+            <field name="color">5</field>
+            <field name="note">Heating, ventilation, and air conditioning specialists. Handles climate control, refrigeration, and air quality systems.</field>
+        </record>
+        
+        <record id="team_plumbers" model="maintenance.team">
+            <field name="name">Plumbers</field>
+            <field name="color">9</field>
+            <field name="note">Plumbing repairs and installations. Handles water systems, drainage, and sanitary equipment.</field>
+        </record>
+        
+        <record id="team_facilities" model="maintenance.team">
+            <field name="name">Facilities Team</field>
+            <field name="color">10</field>
+            <field name="note">General facilities maintenance including building repairs, furniture, and common area upkeep.</field>
         </record>
 
-        <!-- Work Centers (FROM MOCKUP) -->
+        <!-- ==================== WORK CENTERS ==================== -->
         <record id="workcenter_machine_shop" model="maintenance.work.center">
             <field name="name">Machine Shop</field>
-            <field name="code">WC001</field>
+            <field name="code">WC-MECH</field>
             <field name="location">Building A, Ground Floor</field>
             <field name="capacity">8.0</field>
             <field name="hourly_cost">75.00</field>
             <field name="capacity_cost">25.00</field>
             <field name="maintenance_team_id" ref="team_mechanics"/>
+            <field name="note">Main mechanical repair bay with full tool complement, hydraulic lifts, and diagnostic equipment.</field>
         </record>
 
         <record id="workcenter_electronics_lab" model="maintenance.work.center">
             <field name="name">Electronics Lab</field>
-            <field name="code">WC002</field>
+            <field name="code">WC-ELEC</field>
             <field name="location">Building B, Floor 1</field>
-            <field name="capacity">8.0</field>
+            <field name="capacity">6.0</field>
             <field name="hourly_cost">85.00</field>
             <field name="capacity_cost">15.00</field>
             <field name="maintenance_team_id" ref="team_electricians"/>
+            <field name="note">Electrical diagnostics and repair station with oscilloscopes, multimeters, and soldering equipment.</field>
         </record>
 
         <record id="workcenter_it_bay" model="maintenance.work.center">
             <field name="name">IT Service Bay</field>
-            <field name="code">WC003</field>
-            <field name="location">Building C, Server Room</field>
+            <field name="code">WC-IT</field>
+            <field name="location">Building C, Server Room Annex</field>
             <field name="capacity">10.0</field>
             <field name="hourly_cost">50.00</field>
             <field name="capacity_cost">20.00</field>
             <field name="maintenance_team_id" ref="team_it_support"/>
+            <field name="note">IT repair and configuration station with hardware testing equipment and staging area.</field>
+        </record>
+        
+        <record id="workcenter_hvac_shop" model="maintenance.work.center">
+            <field name="name">HVAC Workshop</field>
+            <field name="code">WC-HVAC</field>
+            <field name="location">Building D, Rooftop Access</field>
+            <field name="capacity">4.0</field>
+            <field name="hourly_cost">70.00</field>
+            <field name="capacity_cost">30.00</field>
+            <field name="maintenance_team_id" ref="team_hvac"/>
+            <field name="note">Climate control service center with refrigerant recovery systems and ductwork tools.</field>
+        </record>
+        
+        <record id="workcenter_plumbing" model="maintenance.work.center">
+            <field name="name">Plumbing Bay</field>
+            <field name="code">WC-PLMB</field>
+            <field name="location">Building A, Basement</field>
+            <field name="capacity">3.0</field>
+            <field name="hourly_cost">55.00</field>
+            <field name="capacity_cost">18.00</field>
+            <field name="maintenance_team_id" ref="team_plumbers"/>
+            <field name="note">Plumbing repair shop with pipe threading, soldering, and drainage equipment.</field>
+        </record>
+        
+        <record id="workcenter_general" model="maintenance.work.center">
+            <field name="name">General Workshop</field>
+            <field name="code">WC-GEN</field>
+            <field name="location">Building A, Annex</field>
+            <field name="capacity">5.0</field>
+            <field name="hourly_cost">40.00</field>
+            <field name="capacity_cost">12.00</field>
+            <field name="maintenance_team_id" ref="team_facilities"/>
+            <field name="note">General purpose workshop for furniture repair, painting, and miscellaneous tasks.</field>
         </record>
 
-        <!-- Alternate Work Centers -->
+        <!-- Set Alternate Work Centers -->
         <record id="workcenter_machine_shop" model="maintenance.work.center">
             <field name="alternate_workcenter_ids" eval="[(6, 0, [ref('workcenter_electronics_lab')])]"/>
         </record>
+        <record id="workcenter_it_bay" model="maintenance.work.center">
+            <field name="alternate_workcenter_ids" eval="[(6, 0, [ref('workcenter_electronics_lab')])]"/>
+        </record>
 
-        <!-- Sample Equipment -->
+        <!-- ==================== EQUIPMENT - MACHINERY ==================== -->
         <record id="equipment_cnc_01" model="equipment.equipment">
             <field name="name">CNC Machine #01</field>
             <field name="serial_number">CNC-2024-001</field>
             <field name="category_id" ref="category_machinery"/>
-            <field name="ownership_type">company</field>
-            <field name="location">Building A, Production Floor</field>
+            <field name="ownership_type">department</field>
+            <field name="department_id" ref="dept_production"/>
+            <field name="location">Building A, Production Floor - Bay 1</field>
             <field name="maintenance_team_id" ref="team_mechanics"/>
             <field name="work_center_id" ref="workcenter_machine_shop"/>
             <field name="purchase_date">2024-01-15</field>
             <field name="warranty_expiry">2027-01-15</field>
+            <field name="purchase_value">85000.00</field>
         </record>
 
+        <record id="equipment_cnc_02" model="equipment.equipment">
+            <field name="name">CNC Machine #02</field>
+            <field name="serial_number">CNC-2023-048</field>
+            <field name="category_id" ref="category_machinery"/>
+            <field name="ownership_type">department</field>
+            <field name="department_id" ref="dept_production"/>
+            <field name="location">Building A, Production Floor - Bay 2</field>
+            <field name="maintenance_team_id" ref="team_mechanics"/>
+            <field name="work_center_id" ref="workcenter_machine_shop"/>
+            <field name="purchase_date">2023-06-10</field>
+            <field name="warranty_expiry">2026-06-10</field>
+            <field name="purchase_value">78000.00</field>
+        </record>
+        
+        <record id="equipment_lathe_01" model="equipment.equipment">
+            <field name="name">Industrial Lathe</field>
+            <field name="serial_number">LAT-2022-017</field>
+            <field name="category_id" ref="category_machinery"/>
+            <field name="ownership_type">company</field>
+            <field name="location">Building A, Machine Room</field>
+            <field name="maintenance_team_id" ref="team_mechanics"/>
+            <field name="work_center_id" ref="workcenter_machine_shop"/>
+            <field name="purchase_date">2022-03-22</field>
+            <field name="warranty_expiry">2025-03-22</field>
+            <field name="purchase_value">45000.00</field>
+        </record>
+        
+        <record id="equipment_press_01" model="equipment.equipment">
+            <field name="name">Hydraulic Press 50T</field>
+            <field name="serial_number">HYD-2021-089</field>
+            <field name="category_id" ref="category_machinery"/>
+            <field name="ownership_type">company</field>
+            <field name="location">Building A, Press Room</field>
+            <field name="maintenance_team_id" ref="team_mechanics"/>
+            <field name="work_center_id" ref="workcenter_machine_shop"/>
+            <field name="purchase_date">2021-09-15</field>
+            <field name="warranty_expiry">2024-09-15</field>
+            <field name="purchase_value">32000.00</field>
+        </record>
+
+        <!-- ==================== EQUIPMENT - VEHICLES ==================== -->
         <record id="equipment_forklift_01" model="equipment.equipment">
-            <field name="name">Forklift #01</field>
+            <field name="name">Forklift #01 - Toyota</field>
             <field name="serial_number">FLT-2023-042</field>
             <field name="category_id" ref="category_vehicles"/>
             <field name="ownership_type">company</field>
-            <field name="location">Warehouse B</field>
+            <field name="location">Warehouse B - Dock Area</field>
             <field name="maintenance_team_id" ref="team_mechanics"/>
             <field name="work_center_id" ref="workcenter_machine_shop"/>
             <field name="purchase_date">2023-06-20</field>
             <field name="warranty_expiry">2026-06-20</field>
+            <field name="purchase_value">28000.00</field>
+        </record>
+        
+        <record id="equipment_forklift_02" model="equipment.equipment">
+            <field name="name">Forklift #02 - Hyster</field>
+            <field name="serial_number">FLT-2022-031</field>
+            <field name="category_id" ref="category_vehicles"/>
+            <field name="ownership_type">department</field>
+            <field name="department_id" ref="dept_warehouse"/>
+            <field name="location">Warehouse B - Storage Zone</field>
+            <field name="maintenance_team_id" ref="team_mechanics"/>
+            <field name="work_center_id" ref="workcenter_machine_shop"/>
+            <field name="purchase_date">2022-04-12</field>
+            <field name="warranty_expiry">2025-04-12</field>
+            <field name="purchase_value">25000.00</field>
+        </record>
+        
+        <record id="equipment_delivery_van" model="equipment.equipment">
+            <field name="name">Delivery Van - Ford Transit</field>
+            <field name="serial_number">VAN-2024-005</field>
+            <field name="category_id" ref="category_vehicles"/>
+            <field name="ownership_type">company</field>
+            <field name="location">Parking Lot - Vehicle Bay</field>
+            <field name="maintenance_team_id" ref="team_mechanics"/>
+            <field name="work_center_id" ref="workcenter_machine_shop"/>
+            <field name="purchase_date">2024-02-01</field>
+            <field name="warranty_expiry">2027-02-01</field>
+            <field name="purchase_value">42000.00</field>
+        </record>
+        
+        <record id="equipment_company_car" model="equipment.equipment">
+            <field name="name">Company Car - Honda Accord</field>
+            <field name="serial_number">CAR-2023-012</field>
+            <field name="category_id" ref="category_vehicles"/>
+            <field name="ownership_type">department</field>
+            <field name="department_id" ref="dept_sales"/>
+            <field name="location">Parking Lot - Space A5</field>
+            <field name="maintenance_team_id" ref="team_mechanics"/>
+            <field name="work_center_id" ref="workcenter_machine_shop"/>
+            <field name="purchase_date">2023-08-15</field>
+            <field name="warranty_expiry">2026-08-15</field>
+            <field name="purchase_value">35000.00</field>
         </record>
 
+        <!-- ==================== EQUIPMENT - IT ==================== -->
         <record id="equipment_server_main" model="equipment.equipment">
-            <field name="name">Main Server</field>
+            <field name="name">Main Production Server</field>
             <field name="serial_number">SRV-2024-MAIN</field>
             <field name="category_id" ref="category_it_equipment"/>
             <field name="ownership_type">company</field>
-            <field name="location">Server Room, Building C</field>
+            <field name="location">Server Room, Building C - Rack A1</field>
             <field name="maintenance_team_id" ref="team_it_support"/>
             <field name="work_center_id" ref="workcenter_it_bay"/>
             <field name="purchase_date">2024-03-01</field>
             <field name="warranty_expiry">2027-03-01</field>
+            <field name="purchase_value">15000.00</field>
+        </record>
+        
+        <record id="equipment_server_backup" model="equipment.equipment">
+            <field name="name">Backup Server</field>
+            <field name="serial_number">SRV-2023-BKP</field>
+            <field name="category_id" ref="category_it_equipment"/>
+            <field name="ownership_type">department</field>
+            <field name="department_id" ref="dept_it"/>
+            <field name="location">Server Room, Building C - Rack B2</field>
+            <field name="maintenance_team_id" ref="team_it_support"/>
+            <field name="work_center_id" ref="workcenter_it_bay"/>
+            <field name="purchase_date">2023-07-15</field>
+            <field name="warranty_expiry">2026-07-15</field>
+            <field name="purchase_value">12000.00</field>
+        </record>
+        
+        <record id="equipment_network_switch" model="equipment.equipment">
+            <field name="name">Core Network Switch - Cisco</field>
+            <field name="serial_number">NET-2023-SW01</field>
+            <field name="category_id" ref="category_it_equipment"/>
+            <field name="ownership_type">company</field>
+            <field name="location">Server Room, Building C - Rack A2</field>
+            <field name="maintenance_team_id" ref="team_it_support"/>
+            <field name="work_center_id" ref="workcenter_it_bay"/>
+            <field name="purchase_date">2023-05-10</field>
+            <field name="warranty_expiry">2028-05-10</field>
+            <field name="purchase_value">8500.00</field>
+        </record>
+        
+        <record id="equipment_laptop_sarah" model="equipment.equipment">
+            <field name="name">Laptop - ThinkPad X1 Carbon</field>
+            <field name="serial_number">LPT-2024-SC01</field>
+            <field name="category_id" ref="category_it_equipment"/>
+            <field name="ownership_type">employee</field>
+            <field name="employee_id" ref="emp_sarah_chen"/>
+            <field name="location">IT Department - Desk 4A</field>
+            <field name="maintenance_team_id" ref="team_it_support"/>
+            <field name="work_center_id" ref="workcenter_it_bay"/>
+            <field name="purchase_date">2024-01-10</field>
+            <field name="warranty_expiry">2027-01-10</field>
+            <field name="purchase_value">2200.00</field>
+        </record>
+        
+        <record id="equipment_laptop_tom" model="equipment.equipment">
+            <field name="name">Laptop - Dell XPS 15</field>
+            <field name="serial_number">LPT-2023-TG02</field>
+            <field name="category_id" ref="category_it_equipment"/>
+            <field name="ownership_type">employee</field>
+            <field name="employee_id" ref="emp_tom_garcia"/>
+            <field name="location">Sales - Mobile (Remote)</field>
+            <field name="maintenance_team_id" ref="team_it_support"/>
+            <field name="work_center_id" ref="workcenter_it_bay"/>
+            <field name="purchase_date">2023-09-05</field>
+            <field name="warranty_expiry">2026-09-05</field>
+            <field name="purchase_value">1800.00</field>
         </record>
 
+        <!-- ==================== EQUIPMENT - OFFICE ==================== -->
         <record id="equipment_printer_01" model="equipment.equipment">
-            <field name="name">Office Printer #01</field>
+            <field name="name">Network Printer - HP LaserJet</field>
             <field name="serial_number">PRT-2022-101</field>
             <field name="category_id" ref="category_office"/>
-            <field name="ownership_type">company</field>
-            <field name="location">Office Floor 2</field>
+            <field name="ownership_type">department</field>
+            <field name="department_id" ref="dept_admin"/>
+            <field name="location">Office Floor 2 - Print Station</field>
             <field name="maintenance_team_id" ref="team_it_support"/>
             <field name="work_center_id" ref="workcenter_it_bay"/>
             <field name="purchase_date">2022-11-10</field>
             <field name="warranty_expiry">2024-11-10</field>
+            <field name="purchase_value">1200.00</field>
+        </record>
+        
+        <record id="equipment_printer_02" model="equipment.equipment">
+            <field name="name">Color Printer - Xerox</field>
+            <field name="serial_number">PRT-2023-202</field>
+            <field name="category_id" ref="category_office"/>
+            <field name="ownership_type">company</field>
+            <field name="location">Office Floor 1 - Marketing Area</field>
+            <field name="maintenance_team_id" ref="team_it_support"/>
+            <field name="work_center_id" ref="workcenter_it_bay"/>
+            <field name="purchase_date">2023-03-20</field>
+            <field name="warranty_expiry">2026-03-20</field>
+            <field name="purchase_value">2500.00</field>
+        </record>
+        
+        <record id="equipment_projector_confroom" model="equipment.equipment">
+            <field name="name">Projector - Conference Room A</field>
+            <field name="serial_number">PRJ-2021-CR01</field>
+            <field name="category_id" ref="category_office"/>
+            <field name="ownership_type">company</field>
+            <field name="location">Building B, Conference Room A</field>
+            <field name="maintenance_team_id" ref="team_it_support"/>
+            <field name="work_center_id" ref="workcenter_it_bay"/>
+            <field name="purchase_date">2021-06-15</field>
+            <field name="warranty_expiry">2024-06-15</field>
+            <field name="purchase_value">850.00</field>
         </record>
 
-        <!-- Sample Maintenance Requests with Cost and Reminder -->
+        <!-- ==================== EQUIPMENT - HVAC ==================== -->
+        <record id="equipment_ac_main" model="equipment.equipment">
+            <field name="name">Central AC Unit - Main Building</field>
+            <field name="serial_number">HVAC-2020-001</field>
+            <field name="category_id" ref="category_hvac"/>
+            <field name="ownership_type">company</field>
+            <field name="location">Building A - Rooftop</field>
+            <field name="maintenance_team_id" ref="team_hvac"/>
+            <field name="work_center_id" ref="workcenter_hvac_shop"/>
+            <field name="purchase_date">2020-05-10</field>
+            <field name="warranty_expiry">2025-05-10</field>
+            <field name="purchase_value">25000.00</field>
+        </record>
+        
+        <record id="equipment_ac_server_room" model="equipment.equipment">
+            <field name="name">Precision AC - Server Room</field>
+            <field name="serial_number">HVAC-2022-SR01</field>
+            <field name="category_id" ref="category_hvac"/>
+            <field name="ownership_type">department</field>
+            <field name="department_id" ref="dept_it"/>
+            <field name="location">Building C - Server Room</field>
+            <field name="maintenance_team_id" ref="team_hvac"/>
+            <field name="work_center_id" ref="workcenter_hvac_shop"/>
+            <field name="purchase_date">2022-08-01</field>
+            <field name="warranty_expiry">2027-08-01</field>
+            <field name="purchase_value">18000.00</field>
+        </record>
+        
+        <record id="equipment_industrial_fan" model="equipment.equipment">
+            <field name="name">Industrial Exhaust Fan</field>
+            <field name="serial_number">FAN-2019-EXH01</field>
+            <field name="category_id" ref="category_hvac"/>
+            <field name="ownership_type">department</field>
+            <field name="department_id" ref="dept_production"/>
+            <field name="location">Building A - Production Area Ceiling</field>
+            <field name="maintenance_team_id" ref="team_hvac"/>
+            <field name="work_center_id" ref="workcenter_hvac_shop"/>
+            <field name="purchase_date">2019-11-20</field>
+            <field name="warranty_expiry">2022-11-20</field>
+            <field name="purchase_value">3500.00</field>
+        </record>
+
+        <!-- ==================== EQUIPMENT - ELECTRICAL ==================== -->
+        <record id="equipment_generator" model="equipment.equipment">
+            <field name="name">Backup Generator - 100kW</field>
+            <field name="serial_number">GEN-2021-BKP</field>
+            <field name="category_id" ref="category_electrical"/>
+            <field name="ownership_type">company</field>
+            <field name="location">Building A - Generator Room</field>
+            <field name="maintenance_team_id" ref="team_electricians"/>
+            <field name="work_center_id" ref="workcenter_electronics_lab"/>
+            <field name="purchase_date">2021-02-15</field>
+            <field name="warranty_expiry">2026-02-15</field>
+            <field name="purchase_value">45000.00</field>
+        </record>
+        
+        <record id="equipment_ups_server" model="equipment.equipment">
+            <field name="name">UPS System - Server Room</field>
+            <field name="serial_number">UPS-2023-SRV</field>
+            <field name="category_id" ref="category_electrical"/>
+            <field name="ownership_type">company</field>
+            <field name="location">Building C - Server Room</field>
+            <field name="maintenance_team_id" ref="team_electricians"/>
+            <field name="work_center_id" ref="workcenter_electronics_lab"/>
+            <field name="purchase_date">2023-01-20</field>
+            <field name="warranty_expiry">2028-01-20</field>
+            <field name="purchase_value">12000.00</field>
+        </record>
+
+        <!-- ==================== MAINTENANCE REQUESTS - NEW STAGE ==================== -->
         <record id="request_cnc_oil_leak" model="maintenance.request">
             <field name="name">Oil Leaking from Hydraulic System</field>
-            <field name="description">&lt;p&gt;Found oil pooling under the CNC machine. Hydraulic system appears to have a leak that needs immediate attention.&lt;/p&gt;</field>
+            <field name="description">&lt;p&gt;Found oil pooling under CNC Machine #01. Hydraulic system appears to have a leak near the pressure regulator. Needs immediate attention to prevent damage to electronics.&lt;/p&gt;</field>
             <field name="equipment_id" ref="equipment_cnc_01"/>
             <field name="maintenance_team_id" ref="team_mechanics"/>
             <field name="work_center_id" ref="workcenter_machine_shop"/>
             <field name="request_type">corrective</field>
             <field name="priority">2</field>
             <field name="stage_id" ref="stage_new"/>
-            <field name="reminder_days">3</field>
-            <field name="estimated_cost">250.00</field>
+            <field name="reminder_days">2</field>
+            <field name="estimated_cost">350.00</field>
+            <field name="deadline" eval="(DateTime.today() + timedelta(days=3)).strftime('%Y-%m-%d')"/>
         </record>
 
-        <record id="request_forklift_checkup" model="maintenance.request">
-            <field name="name">Monthly Forklift Inspection</field>
-            <field name="description">&lt;p&gt;Scheduled monthly maintenance check for Forklift #01.&lt;/p&gt;</field>
+        <record id="request_forklift_brakes" model="maintenance.request">
+            <field name="name">Brake System Squealing</field>
+            <field name="description">&lt;p&gt;Forklift #01 brakes are making loud squealing noise. Operators report reduced braking performance. Safety concern.&lt;/p&gt;</field>
             <field name="equipment_id" ref="equipment_forklift_01"/>
             <field name="maintenance_team_id" ref="team_mechanics"/>
             <field name="work_center_id" ref="workcenter_machine_shop"/>
-            <field name="request_type">preventive</field>
-            <field name="priority">1</field>
+            <field name="request_type">corrective</field>
+            <field name="priority">3</field>
             <field name="stage_id" ref="stage_new"/>
-            <field name="reminder_days">7</field>
-            <field name="estimated_cost">150.00</field>
+            <field name="reminder_days">1</field>
+            <field name="estimated_cost">200.00</field>
+            <field name="deadline" eval="(DateTime.today() + timedelta(days=1)).strftime('%Y-%m-%d')"/>
         </record>
-
+        
         <record id="request_printer_jam" model="maintenance.request">
             <field name="name">Paper Jam - Won't Clear</field>
-            <field name="description">&lt;p&gt;Printer shows paper jam error but no visible paper stuck. Needs technician.&lt;/p&gt;</field>
+            <field name="description">&lt;p&gt;HP LaserJet printer shows paper jam error but no visible paper stuck. Error persists after restart. Need technician inspection.&lt;/p&gt;</field>
             <field name="equipment_id" ref="equipment_printer_01"/>
+            <field name="maintenance_team_id" ref="team_it_support"/>
+            <field name="work_center_id" ref="workcenter_it_bay"/>
+            <field name="request_type">corrective</field>
+            <field name="priority">1</field>
+            <field name="stage_id" ref="stage_new"/>
+            <field name="reminder_days">1</field>
+            <field name="estimated_cost">50.00</field>
+        </record>
+        
+        <record id="request_ups_alarm" model="maintenance.request">
+            <field name="name">UPS Alarm - Battery Warning</field>
+            <field name="description">&lt;p&gt;Server room UPS showing battery replacement warning. Still functioning but needs proactive battery replacement.&lt;/p&gt;</field>
+            <field name="equipment_id" ref="equipment_ups_server"/>
+            <field name="maintenance_team_id" ref="team_electricians"/>
+            <field name="work_center_id" ref="workcenter_electronics_lab"/>
+            <field name="request_type">corrective</field>
+            <field name="priority">2</field>
+            <field name="stage_id" ref="stage_new"/>
+            <field name="reminder_days">3</field>
+            <field name="estimated_cost">800.00</field>
+            <field name="deadline" eval="(DateTime.today() + timedelta(days=7)).strftime('%Y-%m-%d')"/>
+        </record>
+        
+        <record id="request_network_slow" model="maintenance.request">
+            <field name="name">Network Switch Port Failure</field>
+            <field name="description">&lt;p&gt;Ports 12-16 on core switch not responding. Affecting connectivity for Marketing department. Needs diagnostics.&lt;/p&gt;</field>
+            <field name="equipment_id" ref="equipment_network_switch"/>
+            <field name="maintenance_team_id" ref="team_it_support"/>
+            <field name="work_center_id" ref="workcenter_it_bay"/>
+            <field name="request_type">corrective</field>
+            <field name="priority">3</field>
+            <field name="stage_id" ref="stage_new"/>
+            <field name="reminder_days">1</field>
+            <field name="estimated_cost">150.00</field>
+            <field name="deadline" eval="(DateTime.today()).strftime('%Y-%m-%d')"/>
+        </record>
+
+        <!-- ==================== MAINTENANCE REQUESTS - IN PROGRESS ==================== -->
+        <record id="request_lathe_calibration" model="maintenance.request">
+            <field name="name">Lathe Calibration Drift</field>
+            <field name="description">&lt;p&gt;Industrial lathe producing parts outside tolerance. Suspected spindle alignment issue. Calibration in progress.&lt;/p&gt;</field>
+            <field name="equipment_id" ref="equipment_lathe_01"/>
+            <field name="maintenance_team_id" ref="team_mechanics"/>
+            <field name="work_center_id" ref="workcenter_machine_shop"/>
+            <field name="request_type">corrective</field>
+            <field name="priority">2</field>
+            <field name="stage_id" ref="stage_in_progress"/>
+            <field name="reminder_days">1</field>
+            <field name="estimated_cost">500.00</field>
+            <field name="duration">2.5</field>
+        </record>
+        
+        <record id="request_ac_noise" model="maintenance.request">
+            <field name="name">Unusual Noise from AC Compressor</field>
+            <field name="description">&lt;p&gt;Main AC unit making grinding noise during startup. Compressor being inspected for bearing wear.&lt;/p&gt;</field>
+            <field name="equipment_id" ref="equipment_ac_main"/>
+            <field name="maintenance_team_id" ref="team_hvac"/>
+            <field name="work_center_id" ref="workcenter_hvac_shop"/>
+            <field name="request_type">corrective</field>
+            <field name="priority">2</field>
+            <field name="stage_id" ref="stage_in_progress"/>
+            <field name="reminder_days">2</field>
+            <field name="estimated_cost">1200.00</field>
+            <field name="duration">4.0</field>
+        </record>
+        
+        <record id="request_laptop_screen" model="maintenance.request">
+            <field name="name">Laptop Screen Flickering</field>
+            <field name="description">&lt;p&gt;Tom's Dell XPS laptop screen flickering intermittently. Suspected display cable issue. Running diagnostics.&lt;/p&gt;</field>
+            <field name="equipment_id" ref="equipment_laptop_tom"/>
             <field name="maintenance_team_id" ref="team_it_support"/>
             <field name="work_center_id" ref="workcenter_it_bay"/>
             <field name="request_type">corrective</field>
             <field name="priority">1</field>
             <field name="stage_id" ref="stage_in_progress"/>
             <field name="reminder_days">1</field>
-            <field name="estimated_cost">50.00</field>
+            <field name="estimated_cost">150.00</field>
+            <field name="duration">1.5</field>
+        </record>
+        
+        <record id="request_press_pressure" model="maintenance.request">
+            <field name="name">Hydraulic Press - Pressure Loss</field>
+            <field name="description">&lt;p&gt;50T press not reaching full pressure. Hydraulic lines being inspected for leaks.&lt;/p&gt;</field>
+            <field name="equipment_id" ref="equipment_press_01"/>
+            <field name="maintenance_team_id" ref="team_mechanics"/>
+            <field name="work_center_id" ref="workcenter_machine_shop"/>
+            <field name="request_type">corrective</field>
+            <field name="priority">2</field>
+            <field name="stage_id" ref="stage_in_progress"/>
+            <field name="reminder_days">2</field>
+            <field name="estimated_cost">600.00</field>
+            <field name="duration">3.0</field>
+        </record>
+        
+        <record id="request_generator_test" model="maintenance.request">
+            <field name="name">Generator Load Test</field>
+            <field name="description">&lt;p&gt;Quarterly load test for backup generator. Currently running test sequence.&lt;/p&gt;</field>
+            <field name="equipment_id" ref="equipment_generator"/>
+            <field name="maintenance_team_id" ref="team_electricians"/>
+            <field name="work_center_id" ref="workcenter_electronics_lab"/>
+            <field name="request_type">preventive</field>
+            <field name="priority">1</field>
+            <field name="stage_id" ref="stage_in_progress"/>
+            <field name="scheduled_date" eval="(DateTime.now()).strftime('%Y-%m-%d %H:%M:%S')"/>
+            <field name="reminder_days">3</field>
+            <field name="estimated_cost">100.00</field>
+            <field name="duration">2.0</field>
+        </record>
+
+        <!-- ==================== MAINTENANCE REQUESTS - REPAIRED ==================== -->
+        <record id="request_projector_bulb" model="maintenance.request">
+            <field name="name">Projector Bulb Replacement</field>
+            <field name="description">&lt;p&gt;Conference room projector bulb burned out. Replaced with new bulb, tested successfully.&lt;/p&gt;</field>
+            <field name="equipment_id" ref="equipment_projector_confroom"/>
+            <field name="maintenance_team_id" ref="team_it_support"/>
+            <field name="work_center_id" ref="workcenter_it_bay"/>
+            <field name="request_type">corrective</field>
+            <field name="priority">1</field>
+            <field name="stage_id" ref="stage_repaired"/>
+            <field name="reminder_days">1</field>
+            <field name="estimated_cost">250.00</field>
+            <field name="actual_cost">275.00</field>
+            <field name="duration">0.5</field>
+            <field name="close_date" eval="(DateTime.today() - timedelta(days=2)).strftime('%Y-%m-%d')"/>
+        </record>
+        
+        <record id="request_van_oil_change" model="maintenance.request">
+            <field name="name">Delivery Van - Oil Change</field>
+            <field name="description">&lt;p&gt;Routine oil change for delivery van at 15,000 km. Completed successfully.&lt;/p&gt;</field>
+            <field name="equipment_id" ref="equipment_delivery_van"/>
+            <field name="maintenance_team_id" ref="team_mechanics"/>
+            <field name="work_center_id" ref="workcenter_machine_shop"/>
+            <field name="request_type">preventive</field>
+            <field name="priority">0</field>
+            <field name="stage_id" ref="stage_repaired"/>
+            <field name="scheduled_date" eval="(DateTime.now() - timedelta(days=3)).strftime('%Y-%m-%d %H:%M:%S')"/>
+            <field name="reminder_days">5</field>
+            <field name="estimated_cost">80.00</field>
+            <field name="actual_cost">85.00</field>
+            <field name="duration">1.0</field>
+            <field name="close_date" eval="(DateTime.today() - timedelta(days=3)).strftime('%Y-%m-%d')"/>
+        </record>
+        
+        <record id="request_server_patch" model="maintenance.request">
+            <field name="name">Main Server - Security Patch</field>
+            <field name="description">&lt;p&gt;Critical security update applied to main production server. Rebooted and tested.&lt;/p&gt;</field>
+            <field name="equipment_id" ref="equipment_server_main"/>
+            <field name="maintenance_team_id" ref="team_it_support"/>
+            <field name="work_center_id" ref="workcenter_it_bay"/>
+            <field name="request_type">preventive</field>
+            <field name="priority">3</field>
+            <field name="stage_id" ref="stage_repaired"/>
+            <field name="scheduled_date" eval="(DateTime.now() - timedelta(days=5)).strftime('%Y-%m-%d %H:%M:%S')"/>
+            <field name="reminder_days">2</field>
+            <field name="estimated_cost">0.00</field>
+            <field name="actual_cost">0.00</field>
+            <field name="duration">1.5</field>
+            <field name="close_date" eval="(DateTime.today() - timedelta(days=5)).strftime('%Y-%m-%d')"/>
+        </record>
+        
+        <record id="request_forklift2_service" model="maintenance.request">
+            <field name="name">Forklift #02 - Annual Service</field>
+            <field name="description">&lt;p&gt;Complete annual service including oil, filters, hydraulics check, and safety inspection.&lt;/p&gt;</field>
+            <field name="equipment_id" ref="equipment_forklift_02"/>
+            <field name="maintenance_team_id" ref="team_mechanics"/>
+            <field name="work_center_id" ref="workcenter_machine_shop"/>
+            <field name="request_type">preventive</field>
+            <field name="priority">1</field>
+            <field name="stage_id" ref="stage_repaired"/>
+            <field name="scheduled_date" eval="(DateTime.now() - timedelta(days=7)).strftime('%Y-%m-%d %H:%M:%S')"/>
+            <field name="reminder_days">7</field>
+            <field name="estimated_cost">450.00</field>
+            <field name="actual_cost">520.00</field>
+            <field name="duration">4.0</field>
+            <field name="close_date" eval="(DateTime.today() - timedelta(days=7)).strftime('%Y-%m-%d')"/>
+        </record>
+        
+        <record id="request_ac_filter" model="maintenance.request">
+            <field name="name">Server Room AC - Filter Replacement</field>
+            <field name="description">&lt;p&gt;Quarterly filter replacement for precision AC. New HEPA filters installed.&lt;/p&gt;</field>
+            <field name="equipment_id" ref="equipment_ac_server_room"/>
+            <field name="maintenance_team_id" ref="team_hvac"/>
+            <field name="work_center_id" ref="workcenter_hvac_shop"/>
+            <field name="request_type">preventive</field>
+            <field name="priority">1</field>
+            <field name="stage_id" ref="stage_repaired"/>
+            <field name="scheduled_date" eval="(DateTime.now() - timedelta(days=4)).strftime('%Y-%m-%d %H:%M:%S')"/>
+            <field name="reminder_days">5</field>
+            <field name="estimated_cost">180.00</field>
+            <field name="actual_cost">180.00</field>
+            <field name="duration">1.0</field>
+            <field name="close_date" eval="(DateTime.today() - timedelta(days=4)).strftime('%Y-%m-%d')"/>
+        </record>
+        
+        <record id="request_car_tire" model="maintenance.request">
+            <field name="name">Company Car - Tire Rotation</field>
+            <field name="description">&lt;p&gt;Routine tire rotation and balance for company car. All four tires rotated.&lt;/p&gt;</field>
+            <field name="equipment_id" ref="equipment_company_car"/>
+            <field name="maintenance_team_id" ref="team_mechanics"/>
+            <field name="work_center_id" ref="workcenter_machine_shop"/>
+            <field name="request_type">preventive</field>
+            <field name="priority">0</field>
+            <field name="stage_id" ref="stage_repaired"/>
+            <field name="scheduled_date" eval="(DateTime.now() - timedelta(days=10)).strftime('%Y-%m-%d %H:%M:%S')"/>
+            <field name="reminder_days">3</field>
+            <field name="estimated_cost">60.00</field>
+            <field name="actual_cost">60.00</field>
+            <field name="duration">0.75</field>
+            <field name="close_date" eval="(DateTime.today() - timedelta(days=10)).strftime('%Y-%m-%d')"/>
+        </record>
+
+        <!-- ==================== MAINTENANCE REQUESTS - OVERDUE (Critical for demo!) ==================== -->
+        <record id="request_overdue_cnc2" model="maintenance.request">
+            <field name="name">CNC #02 - Spindle Vibration</field>
+            <field name="description">&lt;p&gt;OVERDUE: Abnormal vibration detected in CNC #02 spindle. Needs immediate inspection to prevent bearing failure.&lt;/p&gt;</field>
+            <field name="equipment_id" ref="equipment_cnc_02"/>
+            <field name="maintenance_team_id" ref="team_mechanics"/>
+            <field name="work_center_id" ref="workcenter_machine_shop"/>
+            <field name="request_type">corrective</field>
+            <field name="priority">3</field>
+            <field name="stage_id" ref="stage_new"/>
+            <field name="reminder_days">2</field>
+            <field name="estimated_cost">800.00</field>
+            <field name="deadline" eval="(DateTime.today() - timedelta(days=3)).strftime('%Y-%m-%d')"/>
+        </record>
+        
+        <record id="request_overdue_fan" model="maintenance.request">
+            <field name="name">Exhaust Fan - Motor Overheating</field>
+            <field name="description">&lt;p&gt;OVERDUE: Industrial exhaust fan motor overheating. Risk of shutdown during production.&lt;/p&gt;</field>
+            <field name="equipment_id" ref="equipment_industrial_fan"/>
+            <field name="maintenance_team_id" ref="team_hvac"/>
+            <field name="work_center_id" ref="workcenter_hvac_shop"/>
+            <field name="request_type">corrective</field>
+            <field name="priority">2</field>
+            <field name="stage_id" ref="stage_in_progress"/>
+            <field name="reminder_days">1</field>
+            <field name="estimated_cost">400.00</field>
+            <field name="deadline" eval="(DateTime.today() - timedelta(days=1)).strftime('%Y-%m-%d')"/>
+            <field name="duration">1.5</field>
+        </record>
+        
+        <record id="request_overdue_printer2" model="maintenance.request">
+            <field name="name">Xerox Printer - Color Calibration</field>
+            <field name="description">&lt;p&gt;OVERDUE: Color printer producing washed-out prints. Marketing materials affected.&lt;/p&gt;</field>
+            <field name="equipment_id" ref="equipment_printer_02"/>
+            <field name="maintenance_team_id" ref="team_it_support"/>
+            <field name="work_center_id" ref="workcenter_it_bay"/>
+            <field name="request_type">corrective</field>
+            <field name="priority">1</field>
+            <field name="stage_id" ref="stage_new"/>
+            <field name="reminder_days">1</field>
+            <field name="estimated_cost">75.00</field>
+            <field name="deadline" eval="(DateTime.today() - timedelta(days=5)).strftime('%Y-%m-%d')"/>
+        </record>
+
+        <!-- ==================== MAINTENANCE REQUESTS - SCHEDULED FOR FUTURE (Calendar View!) ==================== -->
+        <record id="request_future_cnc1" model="maintenance.request">
+            <field name="name">CNC #01 - Quarterly Calibration</field>
+            <field name="description">&lt;p&gt;Scheduled quarterly precision calibration and alignment check.&lt;/p&gt;</field>
+            <field name="equipment_id" ref="equipment_cnc_01"/>
+            <field name="maintenance_team_id" ref="team_mechanics"/>
+            <field name="work_center_id" ref="workcenter_machine_shop"/>
+            <field name="request_type">preventive</field>
+            <field name="priority">1</field>
+            <field name="stage_id" ref="stage_new"/>
+            <field name="scheduled_date" eval="(DateTime.now() + timedelta(days=7)).strftime('%Y-%m-%d %H:%M:%S')"/>
+            <field name="reminder_days">5</field>
+            <field name="estimated_cost">200.00</field>
+        </record>
+        
+        <record id="request_future_server_backup" model="maintenance.request">
+            <field name="name">Backup Server - Disk Health Check</field>
+            <field name="description">&lt;p&gt;Scheduled disk health analysis and SMART status verification.&lt;/p&gt;</field>
+            <field name="equipment_id" ref="equipment_server_backup"/>
+            <field name="maintenance_team_id" ref="team_it_support"/>
+            <field name="work_center_id" ref="workcenter_it_bay"/>
+            <field name="request_type">preventive</field>
+            <field name="priority">1</field>
+            <field name="stage_id" ref="stage_new"/>
+            <field name="scheduled_date" eval="(DateTime.now() + timedelta(days=14)).strftime('%Y-%m-%d %H:%M:%S')"/>
+            <field name="reminder_days">7</field>
+            <field name="estimated_cost">0.00</field>
+        </record>
+        
+        <record id="request_future_generator" model="maintenance.request">
+            <field name="name">Generator - Fuel Filter Replacement</field>
+            <field name="description">&lt;p&gt;Scheduled fuel filter replacement and fuel system inspection.&lt;/p&gt;</field>
+            <field name="equipment_id" ref="equipment_generator"/>
+            <field name="maintenance_team_id" ref="team_electricians"/>
+            <field name="work_center_id" ref="workcenter_electronics_lab"/>
+            <field name="request_type">preventive</field>
+            <field name="priority">1</field>
+            <field name="stage_id" ref="stage_new"/>
+            <field name="scheduled_date" eval="(DateTime.now() + timedelta(days=21)).strftime('%Y-%m-%d %H:%M:%S')"/>
+            <field name="reminder_days">7</field>
+            <field name="estimated_cost">120.00</field>
+        </record>
+        
+        <record id="request_future_ac_main" model="maintenance.request">
+            <field name="name">Central AC - Annual Maintenance</field>
+            <field name="description">&lt;p&gt;Comprehensive annual service including refrigerant check, coil cleaning, and belt inspection.&lt;/p&gt;</field>
+            <field name="equipment_id" ref="equipment_ac_main"/>
+            <field name="maintenance_team_id" ref="team_hvac"/>
+            <field name="work_center_id" ref="workcenter_hvac_shop"/>
+            <field name="request_type">preventive</field>
+            <field name="priority">1</field>
+            <field name="stage_id" ref="stage_new"/>
+            <field name="scheduled_date" eval="(DateTime.now() + timedelta(days=30)).strftime('%Y-%m-%d %H:%M:%S')"/>
+            <field name="reminder_days">14</field>
+            <field name="estimated_cost">800.00</field>
+        </record>
+        
+        <record id="request_future_forklift1" model="maintenance.request">
+            <field name="name">Forklift #01 - 6-Month Service</field>
+            <field name="description">&lt;p&gt;Semi-annual service including hydraulics, brakes, and safety systems check.&lt;/p&gt;</field>
+            <field name="equipment_id" ref="equipment_forklift_01"/>
+            <field name="maintenance_team_id" ref="team_mechanics"/>
+            <field name="work_center_id" ref="workcenter_machine_shop"/>
+            <field name="request_type">preventive</field>
+            <field name="priority">1</field>
+            <field name="stage_id" ref="stage_new"/>
+            <field name="scheduled_date" eval="(DateTime.now() + timedelta(days=45)).strftime('%Y-%m-%d %H:%M:%S')"/>
+            <field name="reminder_days">10</field>
+            <field name="estimated_cost">350.00</field>
+        </record>
+        
+        <record id="request_today_scheduled" model="maintenance.request">
+            <field name="name">Laptop Battery Health Check</field>
+            <field name="description">&lt;p&gt;Scheduled battery health diagnostic for Sarah's ThinkPad laptop.&lt;/p&gt;</field>
+            <field name="equipment_id" ref="equipment_laptop_sarah"/>
+            <field name="maintenance_team_id" ref="team_it_support"/>
+            <field name="work_center_id" ref="workcenter_it_bay"/>
+            <field name="request_type">preventive</field>
+            <field name="priority">0</field>
+            <field name="stage_id" ref="stage_new"/>
+            <field name="scheduled_date" eval="(DateTime.now()).strftime('%Y-%m-%d %H:%M:%S')"/>
+            <field name="reminder_days">1</field>
+            <field name="estimated_cost">0.00</field>
+        </record>
+        
+        <record id="request_tomorrow_scheduled" model="maintenance.request">
+            <field name="name">Network Switch Firmware Update</field>
+            <field name="description">&lt;p&gt;Scheduled firmware update for core network switch during maintenance window.&lt;/p&gt;</field>
+            <field name="equipment_id" ref="equipment_network_switch"/>
+            <field name="maintenance_team_id" ref="team_it_support"/>
+            <field name="work_center_id" ref="workcenter_it_bay"/>
+            <field name="request_type">preventive</field>
+            <field name="priority">2</field>
+            <field name="stage_id" ref="stage_new"/>
+            <field name="scheduled_date" eval="(DateTime.now() + timedelta(days=1)).strftime('%Y-%m-%d %H:%M:%S')"/>
+            <field name="reminder_days">1</field>
+            <field name="estimated_cost">0.00</field>
+        </record>
+
+        <!-- ==================== SCRAP EXAMPLE (for demo purposes) ==================== -->
+        <record id="request_scrap_example" model="maintenance.request">
+            <field name="name">Beyond Repair - Motherboard Failure</field>
+            <field name="description">&lt;p&gt;Projector suffered catastrophic motherboard failure. Repair cost exceeds replacement value. Equipment scrapped.&lt;/p&gt;</field>
+            <field name="equipment_id" ref="equipment_projector_confroom"/>
+            <field name="maintenance_team_id" ref="team_it_support"/>
+            <field name="work_center_id" ref="workcenter_it_bay"/>
+            <field name="request_type">corrective</field>
+            <field name="priority">1</field>
+            <field name="stage_id" ref="stage_repaired"/>
+            <field name="reminder_days">1</field>
+            <field name="estimated_cost">300.00</field>
+            <field name="actual_cost">0.00</field>
+            <field name="duration">2.0</field>
+            <field name="close_date" eval="(DateTime.today() - timedelta(days=15)).strftime('%Y-%m-%d')"/>
         </record>
 
     </data>

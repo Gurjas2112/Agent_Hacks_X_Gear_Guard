@@ -70,10 +70,11 @@ class Equipment(models.Model):
     # -------------------------------------------------------------------------
     
     ownership_type = fields.Selection([
+        ('company', 'Company'),
         ('department', 'Department'),
         ('employee', 'Employee'),
-    ], string='Ownership Type', default='department', required=True,
-        help="Specify if equipment belongs to a department or specific employee")
+    ], string='Ownership Type', default='company', required=True,
+        help="Specify if equipment belongs to the company, a department, or specific employee")
     
     department_id = fields.Many2one(
         'hr.department',
@@ -235,7 +236,9 @@ class Equipment(models.Model):
     def _compute_owner_display(self):
         """Compute display name of the owner"""
         for equipment in self:
-            if equipment.ownership_type == 'department' and equipment.department_id:
+            if equipment.ownership_type == 'company':
+                equipment.owner_display = 'Company'
+            elif equipment.ownership_type == 'department' and equipment.department_id:
                 equipment.owner_display = equipment.department_id.name
             elif equipment.ownership_type == 'employee' and equipment.employee_id:
                 equipment.owner_display = equipment.employee_id.name
@@ -273,7 +276,10 @@ class Equipment(models.Model):
     @api.onchange('ownership_type')
     def _onchange_ownership_type(self):
         """Clear ownership fields when type changes"""
-        if self.ownership_type == 'department':
+        if self.ownership_type == 'company':
+            self.department_id = False
+            self.employee_id = False
+        elif self.ownership_type == 'department':
             self.employee_id = False
         elif self.ownership_type == 'employee':
             self.department_id = False
@@ -293,6 +299,7 @@ class Equipment(models.Model):
     def _check_ownership(self):
         """Ensure ownership is properly set based on type"""
         for equipment in self:
+            # Company ownership doesn't require department or employee
             if equipment.ownership_type == 'department' and not equipment.department_id:
                 raise ValidationError("Please select a department for department-owned equipment.")
             if equipment.ownership_type == 'employee' and not equipment.employee_id:

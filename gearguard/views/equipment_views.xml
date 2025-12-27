@@ -71,10 +71,10 @@
                         <group string="Ownership">
                             <field name="ownership_type" widget="radio"/>
                             <field name="department_id" 
-                                   invisible="ownership_type != 'department'"
+                                   invisible="ownership_type not in ['department']"
                                    required="ownership_type == 'department'"/>
                             <field name="employee_id" 
-                                   invisible="ownership_type != 'employee'"
+                                   invisible="ownership_type not in ['employee']"
                                    required="ownership_type == 'employee'"/>
                         </group>
                     </group>

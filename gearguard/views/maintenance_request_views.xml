@@ -362,8 +362,17 @@
         <field name="name">Maintenance Calendar</field>
         <field name="res_model">maintenance.request</field>
         <field name="view_mode">calendar,kanban,tree,form</field>
+        <field name="domain">[('request_type', '=', 'preventive')]</field>
         <field name="search_view_id" ref="maintenance_request_view_search"/>
-        <field name="context">{'search_default_preventive': 1}</field>
+        <field name="context">{'default_request_type': 'preventive'}</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Schedule preventive maintenance
+            </p>
+            <p>
+                Click on a date to create a new routine maintenance request.
+            </p>
+        </field>
     </record>
 
     <!-- Action: My Requests -->

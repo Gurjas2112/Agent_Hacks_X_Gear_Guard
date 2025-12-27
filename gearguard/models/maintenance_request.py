@@ -259,6 +259,21 @@ class MaintenanceRequest(models.Model):
     ]
     
     # -------------------------------------------------------------------------
+    # PYTHON CONSTRAINTS
+    # -------------------------------------------------------------------------
+    
+    @api.constrains('technician_id', 'maintenance_team_id')
+    def _check_technician_in_team(self):
+        """Ensure technician is a member of the assigned maintenance team"""
+        for request in self:
+            if request.technician_id and request.maintenance_team_id:
+                if request.technician_id not in request.maintenance_team_id.member_ids:
+                    raise ValidationError(
+                        f"Technician '{request.technician_id.name}' is not a member of team "
+                        f"'{request.maintenance_team_id.name}'. Only team members can be assigned to requests."
+                    )
+    
+    # -------------------------------------------------------------------------
     # DEFAULT METHODS
     # -------------------------------------------------------------------------
     
