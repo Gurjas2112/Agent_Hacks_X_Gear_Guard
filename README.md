@@ -592,7 +592,5 @@ This project is licensed under the **MIT** License - see the [LICENSE](LICENSE) 
 
 **Built with ❤️ for the Odoo Hackathon**
 
-[![GitHub stars](https://img.shields.io/github/stars/Gurjas2112/GearGuard?style=social)](https://github.com/Gurjas2112/GearGuard/stargazers)
-[![GitHub forks](https://img.shields.io/github/forks/Gurjas2112/GearGuard?style=social)](https://github.com/Gurjas2112/GearGuard/network/members)
 
 </div>
