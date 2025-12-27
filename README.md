@@ -19,14 +19,22 @@
 
 ## 📋 Overview
 
-**GearGuard** is a powerful Odoo 17 module designed for tracking and managing company assets including machines, vehicles, computers, and other equipment. It provides a complete solution for maintenance teams to handle corrective and preventive maintenance with advanced features like work center management, cost tracking, and smart reminders.
+**GearGuard** is a powerful Odoo 17 module designed for tracking and managing company assets including machines, vehicles, computers, and other equipment. It provides a complete solution for maintenance teams to handle corrective and preventive maintenance with advanced features like work center management, cost tracking, smart reminders, and intelligent workflow automation.
 
-### 🎯 Perfect For
+### 🎯 Core Philosophy
+
+The module seamlessly connects three core entities:
+- **Equipment** - What is broken (assets, machines, devices)
+- **Teams** - Who fixes it (specialized maintenance teams)
+- **Requests** - The work to be done (corrective or preventive)
+
+### � Perfect For
 - Manufacturing facilities
 - IT departments
 - Fleet management
 - Facility maintenance teams
 - Equipment rental companies
+- Any organization with assets requiring maintenance
 
 ---
 
@@ -34,26 +42,36 @@
 
 ### 📦 Equipment Management
 - **Central Database** - Track all company assets in one place
-- **Ownership Types** - Company, Department, or Employee-owned equipment
-- **Categories** - Organize equipment by type (Machinery, Vehicles, IT, Office)
+- **Flexible Ownership Types**:
+  - 🏢 **Company** - Assets owned by the organization
+  - 🏛️ **Department** - Assets assigned to departments (e.g., Production, IT)
+  - 👤 **Employee** - Assets assigned to specific individuals (e.g., laptops)
+- **Categories** - Organize equipment by type (Machinery, Vehicles, IT Equipment, Office, HVAC, Electrical)
 - **Work Center Assignment** - Link equipment to maintenance work centers
-- **Warranty Tracking** - Monitor purchase dates and warranty expiration
-- **Location Management** - Track where equipment is located
+- **Warranty Tracking** - Monitor purchase dates and warranty expiration with visual status badges
+- **Location Management** - Track where equipment is physically located
+- **Scrap Management** - Mark equipment as scrapped with full audit trail
 
 ### 👥 Maintenance Teams
-- **Specialized Teams** - Create teams for different expertise (Mechanics, Electricians, IT)
-- **Team Members** - Assign technicians to teams
+- **Specialized Teams** - Create teams for different expertise:
+  - Mechanics, Electricians, IT Support, HVAC Technicians, Plumbers, Facilities
+- **Team Members** - Assign technicians to teams with role-based access
+- **Team Leaders** - Designate team leaders for management
 - **Color Coding** - Visual identification in Kanban views
 - **Workload Tracking** - Monitor open requests per team
 
 ### 🔧 Maintenance Requests
-- **Request Types** - Corrective (breakdown) and Preventive (routine)
+- **Request Types**:
+  - ⚡ **Corrective** - Unplanned repair (Breakdown)
+  - 📅 **Preventive** - Planned maintenance (Routine Checkup)
 - **Stage Workflow** - New → In Progress → Repaired → Scrap
-- **Priority Levels** - Low, Medium, High, Critical
+- **Priority Levels** - Low, Normal, High, Urgent (with star indicators)
+- **Auto-Fill Logic** - Selecting equipment automatically fills team and category
+- **Team Validation** - Technicians can only be assigned from the designated team
 - **Duration Tracking** - Automatic calculation of maintenance time
 - **Smart Reminders** - Configurable reminder days before deadline
-- **Cost Tracking** - Estimated and actual cost fields
-- **Work Center Assignment** - Route requests to specific work centers
+- **Cost Tracking** - Estimated and actual cost fields with currency support
+- **Overdue Indicators** - Visual red strips for overdue requests
 
 ### 🏭 Work Centers
 - **Maintenance Bays** - Define physical locations for maintenance work
@@ -63,12 +81,19 @@
 - **Alternate Centers** - Define backup work centers
 - **Team Assignment** - Link work centers to maintenance teams
 
-### 📊 Reporting & Analytics
-- **Kanban Boards** - Visual drag-and-drop management
-- **Calendar View** - Schedule maintenance activities
+### 📊 Views & Reporting
+- **Kanban Board** - Visual drag-and-drop with stage grouping
+- **Calendar View** - Schedule preventive maintenance (shows ONLY preventive requests)
+- **List View** - Detailed tabular view with inline editing
 - **Pivot Tables** - Analyze data by multiple dimensions
 - **Graph Reports** - Visual charts for trends analysis
-- **Smart Buttons** - Quick access to related records
+- **Smart Buttons** - Quick access to related records with counts
+
+### 🔐 Business Logic
+- **Smart Buttons** - Equipment form shows maintenance count badge
+- **Scrap Logic** - Moving request to Scrap stage automatically marks equipment as scrapped
+- **Chatter Integration** - Full audit trail with messages and activities
+- **Constraint Validation** - Ensures data integrity (technician must be team member)
 
 ---
 
@@ -133,78 +158,19 @@ GearGuard/
 ├── Dockerfile              # Custom Odoo image
 ├── docker-compose.yml      # Multi-container setup
 ├── gearguard/              # Odoo module
-│   ├── __manifest__.py
-│   ├── models/
-│   ├── views/
-│   ├── security/
-│   └── ...
+│   ├── __manifest__.py     # Module manifest
+│   ├── models/             # Business logic (6 models)
+│   │   ├── equipment.py
+│   │   ├── equipment_category.py
+│   │   ├── maintenance_request.py
+│   │   ├── maintenance_stage.py
+│   │   ├── maintenance_team.py
+│   │   └── work_center.py
+│   ├── views/              # User interface (6 view files)
+│   ├── security/           # Access control
+│   ├── data/              # Default stages & categories
+│   └── demo/              # Comprehensive demo data
 └── README.md
-```
-
-### Dockerfile
-
-```dockerfile
-# GearGuard - Odoo 17 Maintenance Module
-FROM odoo:17.0
-
-LABEL maintainer="GearGuard Team <gearguard@example.com>"
-LABEL description="GearGuard - The Ultimate Maintenance Tracker for Odoo 17"
-LABEL version="17.0.1.0.0"
-
-USER root
-
-# Install dependencies
-RUN pip3 install --no-cache-dir python-dateutil pytz
-
-# Copy module
-RUN mkdir -p /mnt/extra-addons/gearguard
-COPY ./gearguard /mnt/extra-addons/gearguard
-RUN chown -R odoo:odoo /mnt/extra-addons/gearguard
-
-USER odoo
-
-EXPOSE 8069 8071 8072
-
-CMD ["odoo"]
-```
-
-### Docker Compose
-
-```yaml
-version: '3.8'
-
-services:
-  db:
-    image: postgres:15
-    container_name: gearguard-db
-    environment:
-      - POSTGRES_DB=postgres
-      - POSTGRES_PASSWORD=odoo
-      - POSTGRES_USER=odoo
-    volumes:
-      - odoo-db-data:/var/lib/postgresql/data
-    restart: unless-stopped
-
-  odoo:
-    image: odoo:17.0
-    container_name: gearguard-odoo
-    depends_on:
-      - db
-    ports:
-      - "8069:8069"
-    environment:
-      - HOST=db
-      - USER=odoo
-      - PASSWORD=odoo
-    volumes:
-      - odoo-web-data:/var/lib/odoo
-      - ./gearguard:/mnt/extra-addons/gearguard
-    command: ["odoo", "--addons-path=/mnt/extra-addons,/usr/lib/python3/dist-packages/odoo/addons"]
-    restart: unless-stopped
-
-volumes:
-  odoo-db-data:
-  odoo-web-data:
 ```
 
 ### Docker Commands Reference
@@ -225,8 +191,6 @@ volumes:
 ```bash
 # Check logs
 docker-compose logs odoo
-
-# Verify PostgreSQL is ready
 docker-compose logs db
 ```
 
@@ -234,7 +198,6 @@ docker-compose logs db
 ```bash
 # Restart Odoo to reload addons
 docker-compose restart odoo
-
 # Then in Odoo: Apps → Update Apps List
 ```
 
@@ -254,9 +217,9 @@ docker-compose up -d
 1. **Access Odoo** at `http://localhost:8069`
 2. **Create Database**:
    - Database Name: `gearguard`
-   - Email: `admin@example.com`
+   - Email: `admin@gearguard.com`
    - Password: (your choice)
-   - ✅ Check "Demo Data" for sample records
+   - ✅ **Check "Demo Data"** for sample records
 3. **Enable Developer Mode**: Settings → Activate Developer Mode
 4. **Update Apps List**: Apps → ☰ Menu → Update Apps List
 5. **Install GearGuard**: Remove "Apps" filter → Search "GearGuard" → Install
@@ -266,32 +229,72 @@ docker-compose up -d
 | Menu | Description |
 |------|-------------|
 | **GearGuard** | Main application menu |
-| **Equipment** | Manage all company assets |
-| **Maintenance** | Handle maintenance requests |
+| **Maintenance** | All Requests, My Requests, Calendar |
+| **Equipment** | All Equipment, By Department, By Employee, Categories |
 | **Work Centers** | Configure maintenance bays |
-| **Configuration** | Teams, Categories settings |
-| **Reporting** | Analytics and reports |
+| **Teams** | Manage maintenance teams |
+| **Reporting** | Maintenance Analysis (Pivot/Graph) |
+| **Configuration** | Categories, Teams (admin only) |
 
 ### Quick Workflows
+
+#### Flow 1: The Breakdown (Corrective Maintenance)
+1. **Any user creates a request** - GearGuard → Maintenance → All Requests → Create
+2. **Auto-Fill Magic** - Select Equipment → Team & Category auto-populate!
+3. **Request starts in "New"** stage
+4. **Technician assigns themselves** - Click "Assign to Me" button
+5. **Stage moves to "In Progress"** - Drag card or use statusbar
+6. **Completion** - Record Duration (Hours Spent) → Move to "Repaired"
+
+#### Flow 2: The Routine Checkup (Preventive Maintenance)
+1. **Manager creates preventive request** - Set type to "Preventive (Routine)"
+2. **Set Scheduled Date** - e.g., Next Monday
+3. **View on Calendar** - GearGuard → Maintenance → Calendar
+4. **Technician sees job** - Scheduled date appears on calendar
 
 #### Creating Equipment
 1. **GearGuard → Equipment → All Equipment → Create**
 2. Enter: Name, Serial Number, Category
-3. Select: Ownership Type, Work Center, Team
-4. Add: Purchase Date, Warranty Expiry, Location
+3. Select: Ownership Type (Company/Department/Employee)
+4. Assign: Department or Employee based on ownership
+5. Set: Maintenance Team, Work Center, Location
+6. Add: Purchase Date, Warranty Expiry
 
-#### Creating Maintenance Requests
-1. **GearGuard → Maintenance → All Requests → Create**
-2. Enter: Subject, Description
-3. Select: Equipment (auto-fills team & work center)
-4. Set: Request Type, Priority, Estimated Cost
-5. Configure: Reminder Days
+---
 
-#### Setting Up Work Centers
-1. **GearGuard → Work Centers → Create**
-2. Enter: Name, Code, Location
-3. Set: Capacity, Hourly Cost, Capacity Cost
-4. Assign: Maintenance Team, Alternate Centers
+## 📦 Demo Data Included
+
+The module comes with comprehensive demo data for testing:
+
+### Organizations
+| Entity | Count | Examples |
+|--------|-------|----------|
+| **Departments** | 6 | Production, IT, Warehouse, Facilities, Sales, Administration |
+| **Employees** | 7 | John Miller, Sarah Chen, Alex Kumar, David Brown, etc. |
+
+### Maintenance Infrastructure
+| Entity | Count | Examples |
+|--------|-------|----------|
+| **Teams** | 6 | Mechanics, Electricians, IT Support, HVAC, Plumbers, Facilities |
+| **Work Centers** | 6 | Machine Shop, Electronics Lab, IT Service Bay, HVAC Workshop, etc. |
+
+### Equipment (21 Items)
+| Category | Count | Ownership Types |
+|----------|-------|-----------------|
+| Machinery | 4 | CNC Machines, Lathe, Hydraulic Press |
+| Vehicles | 4 | Forklifts, Delivery Van, Company Car |
+| IT Equipment | 5 | Servers, Network Switch, Laptops |
+| Office | 3 | Printers, Projector |
+| HVAC | 3 | AC Units, Industrial Fan |
+| Electrical | 2 | Generator, UPS System |
+
+### Maintenance Requests (27 Total)
+| Stage | Count | Highlights |
+|-------|-------|------------|
+| **New** | 8 | Includes 3 overdue requests (red indicators!) |
+| **In Progress** | 5 | Active repairs being worked |
+| **Repaired** | 7 | Recently completed |
+| **Scheduled** | 7 | Future preventive maintenance (calendar view) |
 
 ---
 
@@ -315,20 +318,20 @@ gearguard/
 │   ├── equipment_category_views.xml
 │   ├── equipment_views.xml
 │   ├── maintenance_team_views.xml
-│   ├── maintenance_stage_views.xml
 │   ├── maintenance_request_views.xml
 │   ├── work_center_views.xml
 │   └── menu_views.xml
 │
 ├── security/                       # Access control
 │   ├── ir.model.access.csv
-│   └── security.xml
+│   └── gearguard_security.xml
 │
 ├── data/                           # Default data
-│   └── maintenance_stage_data.xml
+│   ├── maintenance_stage_data.xml  # New, In Progress, Repaired, Scrap
+│   └── equipment_category_data.xml # Machinery, Vehicles, IT, etc.
 │
 ├── demo/                           # Demo records
-│   └── demo_data.xml
+│   └── demo_data.xml               # 21 equipment, 27 requests, 6 teams
 │
 └── static/description/             # Module assets
     └── icon.png
@@ -346,34 +349,40 @@ gearguard/
 | `name` | Char | Equipment name (required) |
 | `serial_number` | Char | Unique serial number |
 | `category_id` | Many2one | Equipment category |
-| `ownership_type` | Selection | company/department/employee |
-| `department_id` | Many2one | Owner department |
-| `employee_id` | Many2one | Owner employee |
+| `ownership_type` | Selection | **company** / department / employee |
+| `department_id` | Many2one | Owner department (if type=department) |
+| `employee_id` | Many2one | Owner employee (if type=employee) |
 | `work_center_id` | Many2one | Assigned work center |
-| `maintenance_team_id` | Many2one | Responsible team |
+| `maintenance_team_id` | Many2one | Responsible team (required) |
+| `technician_id` | Many2one | Default technician |
 | `location` | Char | Physical location |
 | `purchase_date` | Date | Date of purchase |
 | `warranty_expiry` | Date | Warranty end date |
-| `note` | Html | Additional notes |
+| `warranty_status` | Selection | Computed: valid/expired/na |
+| `is_scrap` | Boolean | Equipment scrapped flag |
+| `open_request_count` | Integer | Computed: open maintenance count |
 
 #### `maintenance.request`
 | Field | Type | Description |
 |-------|------|-------------|
 | `name` | Char | Request subject (required) |
 | `description` | Html | Detailed description |
-| `equipment_id` | Many2one | Related equipment |
-| `request_type` | Selection | corrective/preventive |
-| `priority` | Selection | 0=Low, 1=Medium, 2=High, 3=Critical |
+| `equipment_id` | Many2one | Related equipment (required) |
+| `category_id` | Many2one | Auto-filled from equipment |
+| `request_type` | Selection | **corrective** / preventive |
+| `priority` | Selection | 0=Low, 1=Normal, 2=High, 3=Urgent |
 | `stage_id` | Many2one | Current workflow stage |
-| `maintenance_team_id` | Many2one | Assigned team |
+| `maintenance_team_id` | Many2one | Assigned team (auto-filled) |
+| `technician_id` | Many2one | Assigned technician (must be team member) |
 | `work_center_id` | Many2one | Assigned work center |
-| `user_id` | Many2one | Assigned technician |
-| `schedule_date` | Date | Scheduled date |
+| `scheduled_date` | Datetime | Scheduled date (for calendar) |
+| `deadline` | Date | Due date for completion |
+| `is_overdue` | Boolean | Computed: deadline passed? |
+| `duration` | Float | Time spent (hours) |
 | `estimated_cost` | Float | Estimated repair cost |
 | `actual_cost` | Float | Final cost after repair |
 | `reminder_days` | Integer | Days before reminder |
 | `reminder_date` | Date | Computed reminder date |
-| `duration` | Float | Time spent (hours) |
 
 #### `maintenance.work.center`
 | Field | Type | Description |
@@ -389,7 +398,6 @@ gearguard/
 | `utilization_rate` | Float | Current utilization percentage |
 | `maintenance_team_id` | Many2one | Assigned maintenance team |
 | `alternate_workcenter_ids` | Many2many | Backup work centers |
-| `note` | Text | Additional notes |
 
 #### `maintenance.team`
 | Field | Type | Description |
@@ -397,9 +405,11 @@ gearguard/
 | `name` | Char | Team name (required) |
 | `color` | Integer | Kanban color index |
 | `member_ids` | Many2many | Team members (res.users) |
-| `note` | Html | Team description |
-| `request_ids` | One2many | Related maintenance requests |
-| `request_count` | Integer | Computed request count |
+| `team_leader_id` | Many2one | Team leader |
+| `note` | Text | Team description |
+| `equipment_count` | Integer | Computed: assigned equipment |
+| `request_count` | Integer | Computed: total requests |
+| `open_request_count` | Integer | Computed: open requests |
 
 ---
 
@@ -409,18 +419,19 @@ gearguard/
 
 | Group | Access Level |
 |-------|--------------|
-| **Maintenance / User** | View, Create, Edit own records |
+| **Maintenance / User** | View requests, create own |
+| **Maintenance / Technician** | Edit requests, equipment |
 | **Maintenance / Manager** | Full CRUD on all records |
 
 ### Access Rights Summary
 
-| Model | User | Manager |
-|-------|------|---------|
-| Equipment | Read, Create, Write | Full |
-| Maintenance Request | Read, Create, Write | Full |
-| Work Center | Read | Full |
-| Maintenance Team | Read | Full |
-| Equipment Category | Read | Full |
+| Model | User | Technician | Manager |
+|-------|------|------------|---------|
+| Equipment | Read | Read, Write | Full |
+| Maintenance Request | Read, Create, Write | Full Write | Full |
+| Work Center | Read | Read, Write | Full |
+| Maintenance Team | Read | Read | Full |
+| Equipment Category | Read | Read | Full |
 
 ---
 
@@ -455,6 +466,14 @@ for f in glob.glob('gearguard/**/*.xml', recursive=True):
 ---
 
 ## 📝 Changelog
+
+### Version 17.0.1.1.0 (Current)
+- Added **Company** ownership type for equipment
+- Enhanced **Calendar View** - now shows ONLY preventive maintenance
+- Added **Technician Validation** - must be team member constraint
+- Comprehensive **Demo Data** - 21 equipment, 27 requests, 6 teams
+- Improved **Overdue Indicators** - red visual strips
+- Enhanced **Auto-Fill Logic** on equipment selection
 
 ### Version 17.0.1.0.0
 - Initial release for Odoo 17
